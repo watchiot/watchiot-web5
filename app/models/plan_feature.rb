@@ -1,0 +1,2 @@
+class PlanFeature < ApplicationRecord
+end

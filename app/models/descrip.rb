@@ -1,0 +1,2 @@
+class Descrip < ApplicationRecord
+end

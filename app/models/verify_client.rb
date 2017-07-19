@@ -1,0 +1,2 @@
+class VerifyClient < ApplicationRecord
+end
