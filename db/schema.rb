@@ -42,9 +42,10 @@ ActiveRecord::Schema.define(version: 20170719035832) do
   end
 
   create_table "descrips", force: :cascade do |t|
-    t.string "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "title"
+    t.string "description"
+    t.string "icon"
+    t.string "lang", default: "en"
   end
 
   create_table "emails", force: :cascade do |t|
