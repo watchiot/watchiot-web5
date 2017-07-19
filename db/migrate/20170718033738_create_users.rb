@@ -14,6 +14,8 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.string :auth_token
       t.string :provider
       t.string :uid
+      t.references :plan # foreign key for table plans
+      t.references :api_key # foreign key for table api_keys
 
       t.timestamps
     end

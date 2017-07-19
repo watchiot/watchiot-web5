@@ -16,9 +16,10 @@ ActiveRecord::Schema.define(version: 20170719035832) do
   enable_extension "plpgsql"
 
   create_table "api_keys", force: :cascade do |t|
-    t.string "email"
+    t.string "api_key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["api_key"], name: "index_api_keys_on_api_key", unique: true
   end
 
   create_table "charts", force: :cascade do |t|
@@ -82,9 +83,11 @@ ActiveRecord::Schema.define(version: 20170719035832) do
   end
 
   create_table "plan_features", force: :cascade do |t|
-    t.string "value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.bigint "plan_id"
+    t.bigint "feature_id"
+    t.string "value", limit: 20
+    t.index ["feature_id"], name: "index_plan_features_on_feature_id"
+    t.index ["plan_id"], name: "index_plan_features_on_plan_id"
   end
 
   create_table "plans", force: :cascade do |t|
@@ -148,8 +151,12 @@ ActiveRecord::Schema.define(version: 20170719035832) do
     t.string "auth_token"
     t.string "provider"
     t.string "uid"
+    t.bigint "plan_id"
+    t.bigint "api_key_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["api_key_id"], name: "index_users_on_api_key_id"
+    t.index ["plan_id"], name: "index_users_on_plan_id"
     t.index ["status"], name: "index_users_on_status"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
