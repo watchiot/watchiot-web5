@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: projects
+#
+#  id            :integer          not null, primary key
+#  name          :string
+#  description   :text
+#  configuration :text
+#  ready         :boolean          default(FALSE)
+#  status        :boolean          default(TRUE)
+#  user_id       :integer
+#  space_id      :integer
+#  user_owner_id :integer
+#  repo_name     :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
 require 'test_helper'
 
 class ProjectTest < ActiveSupport::TestCase
