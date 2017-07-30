@@ -20,6 +20,13 @@ gem 'uglifier', '>= 1.3.0'
 gem 'font-awesome-sass'
 # to use div_for
 gem 'record_tag_helper', '~> 1.0'
+# bootstrap
+gem 'bootstrap-sass'
+# jquery for rails
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
+gem 'jquery-easing-rails'
+
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
