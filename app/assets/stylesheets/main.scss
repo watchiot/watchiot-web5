@@ -43,7 +43,7 @@ p {
   margin-bottom: 20px;
 }
 .bg-primary {
-  background-color: #F05F40;
+  background-color: #225079;
 }
 .bg-dark {
   background-color: #222222;
@@ -227,7 +227,7 @@ header .header-content .header-content-inner p {
   margin: 0 auto 20px;
 }
 .text-primary {
-  color: #F05F40;
+  color: #233140;
 }
 .no-gutter > [class*='col-'] {
   padding-right: 0;
@@ -283,7 +283,7 @@ fieldset[disabled] .btn-default.active {
 }
 .btn-primary {
   color: white;
-  background-color: #F05F40;
+  background-color: #225079;
   border-color: #F05F40;
   -webkit-transition: all 0.35s;
   -moz-transition: all 0.35s;
@@ -369,7 +369,13 @@ footer h3 {
 }
 footer .footer-above {
   padding-top: 50px;
-  background-color: #2C3E50;
+  background-color: #225079;
+}
+footer ul > li > a {
+  color: #233140;
+}
+footer ul > li > a:hover {
+  color: #ffffff;
 }
 footer .footer-col {
   margin-bottom: 50px;
