@@ -202,13 +202,15 @@ Faq.create(
 
 Faq.create(
     question: 'Can I add friends to manage the spaces and projects?',
-    answer: 'You have the ability to invite friends to help you manage spaces and projects, and receive alerts too.',
+    answer: 'You have the ability to invite friends to help you manage spaces and projects, and receive alerts too. '\
+            'You have a maximum of 2 invite friends, if you require more please contact us.',
     lang: 'en')
 
 Faq.create(
     question: 'Puedo agregar amigos para que administren mis espacios y proyectos',
     answer: 'Usted tiene la posibilidad de invitar amigos a que le ayuden a administrar los espacios y proyectos, adem&aacute;s '\
-            'de recibir alertas.',
+            'de recibir alertas. Usted tiene un m&aacute;ximo de invitar dos amigos. Si usted requiere m&aacute;s '\
+            'por favor p&oacute;ngase en contacto con nosotros.',
     lang: 'es')
 
 Faq.create(

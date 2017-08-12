@@ -16,3 +16,4 @@
 //= require jquery-ui
 //= require turbolinks
 //= require jquery.easing
+//= require typed

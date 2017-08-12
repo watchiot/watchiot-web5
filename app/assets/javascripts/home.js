@@ -45,4 +45,15 @@
         distance: '0px'
     }, 300);
 
+    var options = {
+      strings: ["services", "web app", "resources", "devices(iot)", "anything"],
+      typeSpeed: 40,
+      startDelay: 40,
+      backSpeed: 40,
+      loop: true,
+      showCursor: false,
+    }
+
+    var typed = new Typed("#typed-sample", options);
+
 })(jQuery); // End of use strict
