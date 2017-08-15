@@ -4,10 +4,8 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback' => 'users#do_omniauth' , as: 'do_omniauth'
   # register route
   post 'register' => 'users#do_register', as: 'do_register'
-  get 'register' => 'users#register', as: 'register'
   # login route
   post 'login' => 'users#do_login', as: 'do_login'
-  get 'login' => 'users#login', as: 'login'
   # logout route
   get 'logout' => 'users#logout', as: 'logout'
 
@@ -22,7 +20,6 @@ Rails.application.routes.draw do
   patch 'invite/:token', controller: 'notifications', action: 'do_invite'
 
   get 'download' => 'download#index', as: 'download'
-  post 'contact' => 'home#contact', as: 'contact'
   get 'home' => 'home#index', as: 'index'
 
   get '/:username', controller: 'dashboard', action: 'show'

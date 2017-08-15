@@ -2,13 +2,6 @@
 # User controller
 #
 class UsersController < ApplicationController
-  ##
-  # GET /register
-  #
-  def register
-    @user = User.new
-    @email = Email.new
-  end
 
   ##
   # POST /do_register
@@ -22,15 +15,9 @@ class UsersController < ApplicationController
     render 'need_verify_notification'
   rescue => ex
     flash.now[:error] = clear_exception ex.message
-    render 'register'
+    redirect_to '/home#get_started'
   end
 
-  ##
-  # Get /login
-  #
-  def login
-    @user = User.new
-  end
   ##
   # POST /login
   #
@@ -44,7 +31,7 @@ class UsersController < ApplicationController
     redirect_to '/' + user.username
   rescue => ex
     flash.now[:error] = clear_exception ex.message
-    render 'login'
+    redirect_to '/home#get_started'
   end
 
   ##
