@@ -27,7 +27,7 @@ class VerifyClient < ApplicationRecord
   ##
   # Register customer verification and return the token
   #
-  def self.create_and_return_token(user_id, email, concept)
+  def self.token(user_id, email, concept)
     verifyClient = find_by_user_and_concept(user_id, concept).take
     verifyClient = VerifyClient.new if verifyClient.nil?
 

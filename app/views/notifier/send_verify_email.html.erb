@@ -1,0 +1,6 @@
+<h1>Hi <%= @user.username %>!</h1>
+
+<a href="<%= url_for(controller: 'notifications', action: 'verify_email', token: @token, only_path: false)  %>">Click here to verify your email</a>
+<br/><br/>
+
+WatchIoT Support

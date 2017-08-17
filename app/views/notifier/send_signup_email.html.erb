@@ -1,0 +1,9 @@
+<h1>Hi <%= @user.username %></h1>, thanks for signing up!
+
+Welcome to <b>WatchIoT!</b><br/><br/>
+
+<a href="<%= url_for(controller: 'notifications',	 action: 'active', token: @token, only_path: false)  %>">Click here to activate</a> your <b>WatchIoT</b> account <br/><br/>
+
+Regards<br/><br/>
+
+WatchIoT Support

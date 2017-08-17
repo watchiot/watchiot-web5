@@ -53,8 +53,8 @@ class Email < ApplicationRecord
   ##
   # Update the email record
   #
-  def save_email(user_id, checked)
-    self.update!(user_id: user_id, checked: checked, primary: checked)
+  def save_email(user, checked)
+    self.update!(user_id: user.id, checked: checked, primary: checked)
   end
 
   ##

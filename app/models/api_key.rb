@@ -26,4 +26,5 @@ class ApiKey < ApplicationRecord
     api_key.api_key = api_key_uuid
 
     api_key.save!
+  end
 end

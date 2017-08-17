@@ -8,13 +8,13 @@ class UsersController < ApplicationController
   #
   def do_register
     @user = User.new(user_params)
-    @email = Email.new(email: email_params[:email])
+    @email = Email.new(email: params[:email])
 
-    @user.register(@email)
+    User.register(@user, @email)
 
     render 'need_verify_notification'
   rescue => ex
-    flash.now[:error] = clear_exception ex.message
+    flash[:error] = clear_exception ex.message
     redirect_to '/#get_started'
   end
 
@@ -64,13 +64,6 @@ class UsersController < ApplicationController
   # User params
   #
   def user_params
-    params.require(:user).permit(:passwd, :passwd_confirmation, :username, :remember_me)
-  end
-
-  ##
-  # Email params
-  #
-  def email_params
-    params.require(:email).permit(:email)
+    params.require(:user).permit(:passwd, :username, :remember_me)
   end
 end
