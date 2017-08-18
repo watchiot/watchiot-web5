@@ -18,7 +18,12 @@
   </head>
 
   <body id="page-top">
-    <%= render 'layouts/menu' %>
+    <% if @descrips != nil %>
+      <%= render 'layouts/menu' %>
+    <% else %>
+      <%= render 'layouts/menu_secondary' %>
+    <% end %>
+
     <%= yield %>
     <%= render 'layouts/footer' %>
   </body>

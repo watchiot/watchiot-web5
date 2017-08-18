@@ -1,7 +1,14 @@
-<div class="container register-height">
-	<div class="jumbotron">
-		<h2>Thank you for registering!</h2>
-		<p>A confirmation email has been sent to <mark><%= @email.email %></mark>. Please click to the Activation
-			link to Activate your account.</p>
-	</div>
-</div>
+<section>
+    <div class="container">
+        <div class="row">
+					<div class="jumbotron">
+						<h2>Thank you for registering!</h2>
+						<p>A confirmation email has been sent to <strong><%= @email.email %></strong>. Please click to the Activation
+							link to Activate your account.</p>
+					</div>
+				</div>
+		</div>
+</section>
+
+<%= javascript_include_tag "scrollreveal" %>
+<%= javascript_include_tag "home" %>

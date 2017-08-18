@@ -248,7 +248,7 @@ class User < ApplicationRecord
   def self.generate_token(user)
     begin
       user.auth_token = SecureRandom.urlsafe_base64
-    end while User.exists?(column => user.auth_token)
+    end while User.exists?(auth_token: user.auth_token)
   end
 
   ##
