@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     render 'need_verify_notification'
   rescue => ex
     flash[:error] = clear_exception ex.message
-    redirect_to '/#get_started'
+    redirect_to '/#get-started'
   end
 
   ##
@@ -31,7 +31,7 @@ class UsersController < ApplicationController
     redirect_to '/' + user.username
   rescue => ex
     flash.now[:error] = clear_exception ex.message
-    redirect_to '/#get_started'
+    redirect_to '/#get-started'
   end
 
   ##

@@ -35,11 +35,10 @@ class User < ApplicationRecord
   belongs_to :plan
 
   validates :username, uniqueness: true,
-            length: { minimum: 1 },
-            format: { without: /\s+/, message: 'No empty spaces admitted for the username.' }
+            length: { minimum: 1 }
+
   validates_presence_of :username, on: :create
   validates_presence_of :passwd, on: :create
-  validates :passwd, length: { minimum: 8 , message: 'Password has less than 8 characters.' }
 
   validates :phone, numericality: { only_integer: true }, allow_nil: true
 
@@ -215,6 +214,8 @@ class User < ApplicationRecord
   # Save user and email routine
   #
   def self.create_user_with_email(user, email, checked = false)
+    raise StandardError, 'Password has less than 8 characters.' if
+        user.passwd.length < 8
 
     raise StandardError, 'The email is primary in other account' if
         Email.find_primary_by_email(email.email).exists?

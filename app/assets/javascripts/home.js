@@ -4,6 +4,7 @@
     // jQuery for page scrolling feature - requires jQuery Easing plugin
     $(document).on('click', 'a.page-scroll', function(event) {
         var $anchor = $(this);
+
         $('html, body').stop().animate({
             scrollTop: ($($anchor.attr('href')).offset().top - 50)
         }, 1250, 'easeInOutExpo');
@@ -39,11 +40,6 @@
         duration: 1000,
         delay: 200
     });
-    sr.reveal('.sr-contact', {
-        duration: 600,
-        scale: 0.3,
-        distance: '0px'
-    }, 300);
 
     var options = {
       strings: ["services", "web app", "resources", "devices(iot)", "anything"],
@@ -54,6 +50,6 @@
       showCursor: false,
     }
 
-    var typed = new Typed("#typed-sample", options);
+    var typed = new Typed("#typed-sample", options);  
 
 })(jQuery); // End of use strict
