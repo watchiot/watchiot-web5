@@ -4,8 +4,8 @@
 class SpacesController < ApplicationController
   layout 'dashboard'
 
-  before_filter :allow
-  before_filter :allow_space, :except => [:index, :create]
+  before_action:allow
+  before_action :allow_space, :except => [:index, :create]
 
   ##
   # Get /:username/spaces

@@ -4,7 +4,7 @@
 class DashboardController < ApplicationController
   layout 'dashboard'
 
-  before_filter :allow
+  before_action :allow
 
   ##
   # Get /:username

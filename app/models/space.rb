@@ -22,21 +22,12 @@ class Space < ApplicationRecord
 
   before_validation :name_format
 
-  scope :count_by_user, -> user_id {
-          where('user_id = ?', user_id).count
-        }
+  scope :count_by_user, -> user_id { where('user_id = ?', user_id).count }
 
-  scope :find_by_user_order, -> user_id {
-          where('user_id = ?', user_id).
-          order(created_at: :desc)
-        }
+  scope :find_by_user_order, -> user_id { where('user_id = ?', user_id).order(created_at: :desc) }
 
-  scope :find_by_user_and_name, -> user_id, namespace {
-          where('user_id = ?', user_id).
-          where('name = ?', namespace.downcase) if namespace.present?
-        }
+  scope :find_by_user_and_name, -> user_id, namespace { where('user_id = ?', user_id).where('name = ?', namespace.downcase) if namespace.present? }
 
-  ## -------------------- Instance method ----------------------- ##
 
   ##
   # edit a space, only can edit the description for now
@@ -56,13 +47,9 @@ class Space < ApplicationRecord
   # delete a space
   #
   def delete_space(namespace)
-    if namespace.nil? || namespace.downcase != name
-      raise StandardError, 'The namespace is not valid'
-
-    if Project.exists?(space_id: id)
-      raise StandardError, 'This space can not be delete because it has'\
-                           ' one or more projects associate'
-
+    raise StandardError, 'The namespace is not valid' if namespace.nil? || namespace.downcase != name
+    raise StandardError, 'This space can not be delete because it has'\
+                         ' one or more projects associate' if Project.exists?(space_id: id)
     destroy!
   end
 
@@ -70,8 +57,7 @@ class Space < ApplicationRecord
   # Transfer space and projects to a member team
   #
   def transfer(user, user_member_id)
-    if user.nil? || user_member_id.nil? || !Team.find_member(user.id, user_member_id).exists?
-      raise StandardError, 'The member is not valid'
+    raise StandardError, 'The member is not valid' if user.nil? || user_member_id.nil? || !Team.find_member(user.id, user_member_id).exists?
 
     user = User.find(user_member_id)
     raise StandardError, 'The team member can not add more spaces,'\

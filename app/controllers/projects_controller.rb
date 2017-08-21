@@ -5,10 +5,10 @@
 class ProjectsController < ApplicationController
   layout 'dashboard'
 
-  before_filter :allow
-  before_filter :allow_space
-  before_filter :allow_project, :except => [:index, :create]
-  before_filter :add_repo, :except => [:index, :create]
+  before_action :allow
+  before_action :allow_space
+  before_action :allow_project, :except => [:index, :create]
+  before_action :add_repo, :except => [:index, :create]
 
   ##
   # Get /:username/:space/projects

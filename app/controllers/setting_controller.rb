@@ -4,7 +4,7 @@
 class SettingController < ApplicationController
   layout 'dashboard'
 
-  before_filter :allow_me
+  before_action :allow_me
 
   ##
   # Get /:username/setting

@@ -5,7 +5,7 @@
 class ChartController < ApplicationController
   layout 'dashboard'
 
-  before_filter :allow
+  before_action :allow
 
   ##
   # Get /:username/chart

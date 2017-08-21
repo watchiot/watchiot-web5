@@ -44,6 +44,8 @@ gem 'bcrypt', '~> 3.1.7'
 # env
 gem 'figaro'
 
+gem 'omniauth-github'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

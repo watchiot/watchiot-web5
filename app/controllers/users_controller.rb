@@ -19,22 +19,6 @@ class UsersController < ApplicationController
   end
 
   ##
-  # POST /login
-  #
-  def do_login
-    @user = User.new(user_params)
-    user = User.login(user_params[:username], user_params[:passwd])
-
-    cookies[:auth_token] = user.auth_token unless params[:remember_me]
-    cookies.permanent[:auth_token] = user.auth_token if params[:remember_me]
-
-    redirect_to '/' + user.username
-  rescue => ex
-    flash.now[:error] = clear_exception ex.message
-    redirect_to '/#get-started'
-  end
-
-  ##
   # Get /do_omniauth
   #
   def do_omniauth
@@ -48,6 +32,22 @@ class UsersController < ApplicationController
     flash[:error] = clear_exception ex.message
     redirect_to 'login'
   end
+
+  ##
+  # POST /login
+  #
+  def do_login
+    @user = User.new(user_params)
+    user = User.login(user_params[:username], user_params[:passwd])
+
+    cookies[:auth_token] = user.auth_token unless params[:remember_me]
+    cookies.permanent[:auth_token] = user.auth_token if params[:remember_me]
+
+    redirect_to '/' + user.username
+  rescue => ex
+    flash.now[:error] = clear_exception ex.message
+    redirect_to '/#get-started'
+  end  
 
   ##
   # Get /logout

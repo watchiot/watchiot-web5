@@ -59,7 +59,7 @@ class User < ApplicationRecord
 
     User.create_user_with_email(user, email)
 
-    token = VerifyClient.token(user.id, email, 'register')
+    token = VerifyClient.token(user.id, email.email, 'register')
     Notifier.send_signup_email(email.email, user, token).deliver_later
   end
 

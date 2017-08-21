@@ -3,10 +3,24 @@
 #
 class NotificationsController < ApplicationController
 
-  before_filter :find_reset_user_by_token, :only => [:reset, :do_reset]
-  before_filter :find_active_user_by_token, :only => :active
-  before_filter :find_verify_email_by_token, :only => :verify_email
-  before_filter :find_invite_user_by_token, :only => [:invite, :do_invite]
+  before_action :find_reset_user_by_token, :only => [:reset, :do_reset]
+  before_action :find_active_user_by_token, :only => :active
+  before_action :find_verify_email_by_token, :only => :verify_email
+  before_action :find_invite_user_by_token, :only => [:invite, :do_invite]
+
+  ##
+  # Get /active
+  #
+  def active
+    @user.active_account @email
+    @verifyClient.destroy!
+
+    cookies[:auth_token] = @user.auth_token
+    redirect_to '/' + @user.username
+  rescue StandardError => ex
+    flash[:error] = clear_exception ex.message
+    redirect_to '/'
+  end
 
   ##
   # GET /forgot
@@ -45,20 +59,6 @@ class NotificationsController < ApplicationController
   rescue StandardError => ex
     flash.now[:error] = clear_exception ex.message
     render 'users/reset'
-  end
-
-  ##
-  # Get /active
-  #
-  def active
-    @user.active_account @email
-    @verifyClient.destroy!
-
-    cookies[:auth_token] = @user.auth_token
-    redirect_to '/' + @user.username
-  rescue StandardError => ex
-    flash[:error] = clear_exception ex.message
-    redirect_to '/'
   end
 
   ##
