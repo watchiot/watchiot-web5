@@ -1,0 +1,12 @@
+<h1>Hi <%= @user.username %>,</h1>
+
+<p>A password reset request was received for your account. Please ignore it if you did not initiate this request.</p>
+<br/>
+
+<a href="<%= url_for(controller: 'notifications',	 action: 'reset', token: @token, only_path: false)  %>">Click here to begin</a> the password reset process </br>
+
+<br/><br/>
+Thanks,
+<br/><br/>
+
+WatchIoT Support

@@ -45,9 +45,9 @@ class UsersController < ApplicationController
 
     redirect_to '/' + user.username
   rescue => ex
-    flash.now[:error] = clear_exception ex.message
+    flash[:error] = clear_exception ex.message
     redirect_to '/#get-started'
-  end  
+  end
 
   ##
   # Get /logout

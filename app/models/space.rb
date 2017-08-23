@@ -59,6 +59,7 @@ class Space < ApplicationRecord
   def transfer(user, user_member_id)
     raise StandardError, 'The member is not valid' if user.nil? || user_member_id.nil? || !Team.find_member(user.id, user_member_id).exists?
 
+
     user = User.find(user_member_id)
     raise StandardError, 'The team member can not add more spaces,'\
               ' please contact with us!' unless Space.can_create_space?(user)

@@ -89,7 +89,7 @@ class User < ApplicationRecord
 
     User.create_user_with_email(user, email)
 
-    token = VerifyClient.create_token(user.id, email_member, 'invited')
+    token = VerifyClient.token(user.id, email_member, 'invited')
     Notifier.send_create_user_email(email_member, token).deliver_later
     user
   end
@@ -112,7 +112,7 @@ class User < ApplicationRecord
 
     return if user.nil? || !user.status? || email.nil?
 
-    token = VerifyClient.create_token(user.id, email, 'reset')
+    token = VerifyClient.token(user.id, email, 'reset')
     Notifier.send_forget_passwd_email(email.email, user, token).deliver_later
   end
 

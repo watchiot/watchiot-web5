@@ -55,7 +55,7 @@ class NotificationsController < ApplicationController
     @verifyClient.destroy!
 
     cookies.clear
-    redirect_to '/login'
+    redirect_to '/#get-started'
   rescue StandardError => ex
     flash.now[:error] = clear_exception ex.message
     render 'users/reset'
@@ -154,13 +154,13 @@ class NotificationsController < ApplicationController
   # User params
   #
   def user_reset_params
-    params.require(:user).permit(:passwd_new, :passwd_confirmation)
+    params.require(:user).permit(:passwd_new)
   end
 
   ##
   # User params
   #
   def user_params
-    params.require(:user).permit(:passwd, :passwd_confirmation, :username)
+    params.require(:user).permit(:passwd, :username)
   end
 end
