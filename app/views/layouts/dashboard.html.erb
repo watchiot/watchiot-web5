@@ -17,6 +17,14 @@
     <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
 
     <style>
+html,
+    body {
+      height: 100%;
+      width: 100%;
+    }
+    body {
+      font-family: 'Merriweather', 'Helvetica Neue', Arial, sans-serif;
+    }
 
 #wrapper {
     padding-left: 0;
@@ -26,11 +34,6 @@
     width: 100%;
     padding: 0;
     background-color: #fff;
-}
-
-.huge {
-    font-size: 50px;
-    line-height: normal;
 }
 
 @media(min-width:768px) {
@@ -45,6 +48,12 @@
 
 /* Top Navigation */
 
+.navbar-brand {
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
 .top-nav {
     padding: 0 15px;
 }
@@ -58,7 +67,7 @@
     padding-top: 15px;
     padding-bottom: 15px;
     line-height: 20px;
-    color: #999;
+    color: #F05F40;
 }
 
 .top-nav>li>a:hover,
@@ -67,7 +76,7 @@
 .top-nav>.open>a:hover,
 .top-nav>.open>a:focus {
     color: #fff;
-    background-color: #000;
+    background-color: #233140;
 }
 
 .top-nav>.open>.dropdown-menu {
@@ -86,35 +95,12 @@
     white-space: normal;
 }
 
-ul.message-dropdown {
-    padding: 0;
-    max-height: 250px;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-li.message-preview {
-    width: 275px;
-    border-bottom: 1px solid rgba(0,0,0,.15);
-}
-
-li.message-preview>a {
-    padding-top: 15px;
-    padding-bottom: 15px;
-}
-
-li.message-footer {
-    margin: 5px 0;
-}
-
-ul.alert-dropdown {
-    width: 200px;
-}
-
 /* Side Navigation */
 
 @media(min-width:768px) {
     .side-nav {
+        font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+        background-color: #233140 !important;
         position: fixed;
         top: 51px;
         left: 225px;
@@ -123,7 +109,6 @@ ul.alert-dropdown {
         border: none;
         border-radius: 0;
         overflow-y: auto;
-        background-color: #222;
         bottom: 0;
         overflow-x: hidden;
         padding-bottom: 40px;
@@ -152,96 +137,22 @@ ul.alert-dropdown {
     display: block;
     padding: 10px 15px 10px 30px;
     text-decoration: none;
-    color: #999;
+    color: #fff;
 }
 
 .side-nav>li>ul>li>ul>li>a {
     display: block;
     padding: 15px 15px 10px 50px;
     text-decoration: none;
-    color: #999;
+    color: #fff;
 }
-
 
 .side-nav>li>ul>li>a:hover {
     color: #fff;
 }
 
-
 .side-nav>li>ul>li>ul>li>a:hover {
     color: #fff;
-}
-
-/* Flot Chart Containers */
-
-.flot-chart {
-    display: block;
-    height: 400px;
-}
-
-.flot-chart-content {
-    width: 100%;
-    height: 100%;
-}
-
-/* Custom Colored Panels */
-
-.huge {
-    font-size: 40px;
-}
-
-.panel-green {
-    border-color: #5cb85c;
-}
-
-.panel-green > .panel-heading {
-    border-color: #5cb85c;
-    color: #fff;
-    background-color: #5cb85c;
-}
-
-.panel-green > a {
-    color: #5cb85c;
-}
-
-.panel-green > a:hover {
-    color: #3d8b3d;
-}
-
-.panel-red {
-    border-color: #d9534f;
-}
-
-.panel-red > .panel-heading {
-    border-color: #d9534f;
-    color: #fff;
-    background-color: #d9534f;
-}
-
-.panel-red > a {
-    color: #d9534f;
-}
-
-.panel-red > a:hover {
-    color: #b52b27;
-}
-
-.panel-yellow {
-    border-color: #f0ad4e;
-}
-
-.panel-yellow > .panel-heading {
-    border-color: #f0ad4e;
-    color: #fff;
-    background-color: #f0ad4e;
-}
-
-.panel-yellow > a {
-    color: #f0ad4e;
-}
-
-.panel-yellow > a:hover {
-    color: #df8a13;
 }
 
 footer.sticky-footer {
@@ -276,7 +187,7 @@ width: calc(100% - 55px); } }
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">WatchIoT</a>
+                <a class="navbar-brand" href="/">WATCHIOT</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -284,17 +195,17 @@ width: calc(100% - 55px); } }
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> gorums <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Dashboard</a>
+                            <a href="/<%= me.username %>"><i class="fa fa-fw fa-gear"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Charts</a>
+                            <a href="/<%= me.username %>/chart"><i class="fa fa-fw fa-gear"></i> Charts</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                            <a href="/<%= me.username %>/setting"><i class="fa fa-fw fa-gear"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>
                     </ul>
                 </li>
@@ -303,13 +214,13 @@ width: calc(100% - 55px); } }
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
-                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                        <a href="/<%= me.username %>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                     </li>
                     <li>
-                        <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
+                        <a href="/<%= me.username %>/chart"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
                     </li>
                     <li>
-                        <a href="tables.html"><i class="fa fa-fw fa-table"></i> Setting</a>
+                        <a href="/<%= me.username %>/setting"><i class="fa fa-fw fa-table"></i> Setting</a>
                     </li>
                     <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Spaces <i class="fa fa-fw fa-caret-down"></i></a>
