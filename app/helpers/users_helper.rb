@@ -1,3 +1,5 @@
+require "digest/md5"
+
 module UsersHelper
   ##
   # This method return the primary email
@@ -13,5 +15,9 @@ module UsersHelper
   def user_name(user_id)
     user = User.find(user_id)
     user.username unless user.nil?
+  end
+
+  def gravatar(email)
+    'http://gravatar.com/avatar/' + Digest::MD5.hexdigest(email).to_s
   end
 end
