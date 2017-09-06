@@ -1,1 +1,20 @@
-<% @title=param_user %>
+<div class="row">
+    <h3>Create a new space</h3>
+
+    <div class="panel panel-success">
+      <div class="panel-body">
+          <%= render 'spaces/create_space', object: @space %>
+      </div>
+    </div>
+
+    <br />
+    <div>
+      <div class="panel panel-success">
+        <div class="panel-body">
+					<%= render 'history', object: @logs %>
+        </div>
+
+      </div>
+
+    </div>
+</div>

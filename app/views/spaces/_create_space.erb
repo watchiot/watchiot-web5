@@ -1,0 +1,25 @@
+<%= render 'shared/alert_message' %>
+
+<%= form_for @space, url: '/' + param_user + '/create' do |f| %>
+<div class="form-horizontal">
+	<%= div_for(@space, class: 'form-group') do %>
+		<label class="col-lg-2">Namespace</label>
+		<div class="col-lg-10">
+			<%= f.text_field :name, class: 'form-control' %>
+		</div>
+	<% end %>
+
+	<div class="form-group">
+		<label class="col-lg-2">Description</label>
+		<div class="col-lg-10">
+			<%= f.text_area :description, class: 'form-control' %>
+		</div>
+	</div>
+
+	<%= div_for(@space, class: 'form-group') do %>
+		<div class="col-lg-offset-2 col-lg-6">
+			<%= submit_tag 'Create Space', class: 'btn btn-primary' %>
+		</div>
+	<% end %>
+</div>
+<% end %>
