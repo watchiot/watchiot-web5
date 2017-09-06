@@ -1,0 +1,66 @@
+<div class="panel panel-default">
+	<div class="panel-heading"><b>Emails</b></div>
+	<div class="panel-body">
+		<small>The primary email receive all the notifications by default.</small>
+		<table class="table table-hover">
+			<colgroup>
+				<col class="col-xs-6">
+				<col class="col-xs-2">
+				<col class="col-xs-2">
+				<col class="col-xs-2">
+			</colgroup>
+			<thead>
+			<tr>
+				<th>Email</th>
+				<th>Primary</th>
+				<th>Verify</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			<% @emails.each do |email| %>
+				<tr>
+					<td><%= email.email%></td>
+					<td><%if email.primary? %><i class="fa fa-check"></i><%end%></td>
+					<td><%if email.checked? %><i class="fa fa-check"></i><%end%></td>
+					<td>
+						<%unless email.primary? %>
+
+							<%if email.checked?%>
+								<%= link_to  '/' + me.username + '/setting/account/primary/email/' + email.id.to_s,
+														class: 'clear-background' do %>
+									<i class="fa fa-check-circle-o fa-2x" title="Check like primary"></i>
+								<%end%>
+							<%else%>
+								<%= link_to  '/' + me.username + '/setting/account/verify/email/' + email.id.to_s,
+														class: 'clear-background' do %>
+									<i class="fa fa-check-circle fa-2x" title="Verify email"></i>
+								<%end%>
+							<%end%>
+
+							<%= link_to  '/' + me.username + '/setting/account/remove/email/'+ email.id.to_s,
+													method: :delete, class: 'clear-background' do %>
+								<i class="fa fa-trash fa-2x" title="Delete the email"></i>
+							<%end%>
+						<%end%>
+					</td>
+				</tr>
+			<% end%>
+			</tbody>
+		</table>
+
+		<%= form_for @email, url: '/' + me.username + '/setting/account/add/email'  do |f| %>
+			<div class="form-group">
+				<%= div_for(@email, class: 'form-group col-lg-6') do %>
+					<label>New email</label>
+					<div>
+						<%= f.email_field :email, class: 'form-control', placeholder: 'New Email', required: true %>
+					</div>
+				<%end%>
+				<%= div_for(@email, class: 'form-group col-lg-9') do %>
+					<%= submit_tag 'Add email', class: 'btn btn-primary' %>
+				<%end%>
+			</div>
+		<%end%>
+	</div>
+</div>

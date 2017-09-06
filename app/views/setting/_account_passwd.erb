@@ -1,0 +1,37 @@
+<div class="panel panel-default">
+	<div class="panel-heading"><b>Change password</b></div>
+	<div class="panel-body">
+		<%= form_for @user, url: '/' + me.username + '/setting/account/password'  do |f| %>
+			<div class="form-group">
+				<%= div_for(@email, class: 'form-group col-lg-6') do %>
+					<label>Old password</label>
+					<div>
+						<%= f.password_field :passwd, class: 'form-control', placeholder: 'Old password' %>
+					</div>
+				<% end %>
+
+				<div class="col-lg-6 col-lg-offset-6">
+				</div>
+
+				<%= div_for(@email, class: 'form-group col-lg-6') do %>
+					<label>New password</label>
+					<div>
+						<%= f.password_field :passwd_new, class: 'form-control', placeholder: 'New password' %>
+					</div>
+				<% end %>
+
+				<%= div_for(@email, class: 'form-group col-lg-6') do %>
+					<label>Confirm password</label>
+					<div>
+						<%= f.password_field :passwd_confirmation, class: 'form-control', placeholder: 'Confirm password' %>
+					</div>
+				<% end %>
+
+				<%= div_for(@email, class: 'form-group col-lg-9') do %>
+					<%= submit_tag 'Save password', class: 'btn btn-primary' %>
+					<a href="/forgot">I forgot my password</a>
+				<%end%>
+			</div>
+		<% end %>
+	</div>
+</div>

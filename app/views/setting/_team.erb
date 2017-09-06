@@ -1,0 +1,86 @@
+<div role="tabpanel" class="tab-pane<%if @in == 'team'%> active<%end%>" id="team">
+		<div class="panel-body">
+			<div data-example-id="simple-table" class="bs-example">
+
+				<%= render 'shared/alert_message'%>
+
+				<div class="panel panel-primary">
+					<div class="panel-heading"><b>Add a new member</b></div>
+					<div class="panel-body">
+
+						<small>If the member does not exist on <b>WatchIoT</b> we will send an email to the new member and we will create an account with a default password.</small>
+						<%= form_for @email, url: '/' + me.username + '/setting/team/add' do |f| %>
+						<div class="form-group">
+								<%= div_for(@email, class: 'form-group col-lg-6') do %>
+								<label>Email</label>
+								<div>
+									<%= f.email_field :email, class: 'form-control', placeholder: 'Email member' %>
+								</div>
+							<% end%>
+
+							<%= div_for(@email, class: 'form-group col-lg-9') do %>
+								<%= submit_tag 'Add email', class: 'btn btn-primary' %>
+							<%end%>
+
+						</div>
+						<%end%>
+					</div>
+				</div>
+
+				<table class="table table-striped">
+					<colgroup>
+						<col class="col-xs-9">
+						<col class="col-xs-3">
+					</colgroup>
+					<thead>
+					<tr>
+						<th>Members in my team</th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody>
+					<% @teams.each do |team| %>
+						<tr>
+							<td>
+								<img class="img-circle" data-email="<%= user_email(team.user_team_id) %>" width="23" height="23">
+								<%= user_name(team.user_team_id) %> (<b><%= user_email(team.user_team_id) %></b>)
+							</td>
+							<td>
+								<%= link_to '/' + me.username + '/setting/team/delete/' + team.user_team_id.to_s,
+														method: :delete , class: 'list-action clear-background' do%>
+									<i class="fa fa-trash fa-2x"></i>
+								<%end%>
+							</td>
+						</tr>
+					<%end%>
+					</tbody>
+				</table>
+
+				<table class="table table-striped">
+					<colgroup>
+						<col class="col-xs-9">
+						<col class="col-xs-3">
+					</colgroup>
+					<thead>
+					<tr>
+						<th>Participate in teams</th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody>
+					<% @teams_belong.each do |team| %>
+						<tr>
+							<td>
+								<img class="img-circle" data-email="<%= user_email(team.user_id) %>" width="23" height="23">
+								<%= user_name(team.user_id) %> (<b><%= user_email(team.user_id) %></b>)
+							</td>
+							<td>
+								<%=link_to  'Go', '/' + user_name(team.user_id)%>
+							</td>
+						</tr>
+					<%end%>
+					</tbody>
+				</table>
+			</div>
+		</div>
+</div>
