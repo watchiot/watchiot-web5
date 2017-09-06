@@ -127,19 +127,3 @@
 .side-nav>li>ul>li>ul>li>a:hover {
     color: #fff;
 }
-
-footer.sticky-footer {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 60px;
-  background-color: #233140;
-  line-height: 55px; }
-  @media (min-width: 992px) {
-    footer.sticky-footer {
-      width: calc(100% - 200px); } }
-
-@media (min-width: 992px) {
-  body.sidenav-toggled footer.sticky-footer {
-width: calc(100% - 55px); } }
