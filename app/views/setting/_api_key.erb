@@ -4,18 +4,24 @@
 
 				<%= render 'shared/alert_message'%>
 
-				<b>My API Key</b>
-				<br /><br />
-				<%= me_api_key %>
-				<br /><br />
+				<div class="panel panel-default">
+					<div class="panel-heading"><b>My API Key</b></div>
+					<div class="panel-body">
 
-				<%= form_for @user, url: '/' + me.username + '/setting/key/generate' do |f| %>
-					<div class="form-group">
-						<%= div_for(@user, class: 'form-group') do %>
-							<%= submit_tag 'Generate new', class: 'btn btn-primary' %>
-						<%end%>
+						<div class="form-group">
+								<%= me_api_key %>
+						</div>
+
+						<%= form_for @user, url: '/' + me.username + '/setting/key/generate' do |f| %>
+							<div class="form-group">
+								<%= div_for(@user, class: 'form-group') do %>
+									<%= submit_tag 'Generate new', class: 'btn btn-primary' %>
+								<%end%>
+							</div>
+						<% end %>
+
 					</div>
-				<% end %>
+				</div>
 			</div>
 		</div>
 </div>

@@ -9,7 +9,7 @@
 					<%= div_for(me, class: 'form-group col-lg-12') do %>
 						<label>Picture</label>
 						<div class="img-container">
-							<img class="img-circle" data-email="<%= me_user_email %>">
+							<%= image_tag(gravatar(me_user_email), size: "150x150", class: "img-circle") %>
 						</div>
 						<small>
 							We are using
@@ -251,7 +251,7 @@
 						<small>If you want to receive notification with the latest news by email.</small>
 						<br />
 						<label>
-							<%= f.check_box :receive_notif_last_new %>Receive latest news by Email
+							<%= f.check_box :receive_notif_last_new %> Receive latest news by Email
 						</label>
 					<%end%>
 

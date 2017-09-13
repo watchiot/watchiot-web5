@@ -18,14 +18,7 @@
 					<div>
 						<%= f.password_field :passwd_new, class: 'form-control', placeholder: 'New password' %>
 					</div>
-				<% end %>
-
-				<%= div_for(@email, class: 'form-group col-lg-6') do %>
-					<label>Confirm password</label>
-					<div>
-						<%= f.password_field :passwd_confirmation, class: 'form-control', placeholder: 'Confirm password' %>
-					</div>
-				<% end %>
+				<% end %>				
 
 				<%= div_for(@email, class: 'form-group col-lg-9') do %>
 					<%= submit_tag 'Save password', class: 'btn btn-primary' %>

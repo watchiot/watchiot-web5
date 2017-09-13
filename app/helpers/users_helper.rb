@@ -18,6 +18,6 @@ module UsersHelper
   end
 
   def gravatar(email)
-    'http://gravatar.com/avatar/' + Digest::MD5.hexdigest(email).to_s
+    'http://gravatar.com/avatar/' + Digest::MD5.hexdigest(email).to_s + '?s=200'
   end
 end

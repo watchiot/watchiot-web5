@@ -14,16 +14,16 @@
     <ul class="nav navbar-right top-nav">
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <%= image_tag(gravatar(me_user_email), size: "23x23") %>
+              <%= image_tag(gravatar(me_user_email), size: "23x23", class: "img-circle") %>
               <%= me.username %>
               <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="/<%= me.username %>"><i class="fa fa-fw fa-gear"></i> Dashboard</a>
+                    <a href="/<%= me.username %>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                 </li>
                 <li>
-                    <a href="/<%= me.username %>/chart"><i class="fa fa-fw fa-gear"></i> Charts</a>
+                    <a href="/<%= me.username %>/chart"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
                 </li>
                 <li>
                     <a href="/<%= me.username %>/setting"><i class="fa fa-fw fa-gear"></i> Settings</a>
@@ -45,30 +45,30 @@
                 <a href="/<%= me.username %>/chart"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
             </li>
             <li>
-                <a href="/<%= me.username %>/setting"><i class="fa fa-fw fa-table"></i> Setting</a>
+                <a href="/<%= me.username %>/setting"><i class="fa fa-fw fa-gear"></i> Setting</a>
             </li>
             <li>
-                <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Spaces <i class="fa fa-fw fa-caret-down"></i></a>
+                <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-briefcase"></i> Spaces <i class="fa fa-fw fa-caret-down"></i></a>
                 <ul id="demo" class="collapse in">
                     <li>
-                      <a href="javascript:;" data-toggle="collapse" data-target="#project1"><i class="fa fa-fw fa-arrows-v"></i> Spaces 1<i class="fa fa-fw fa-caret-down"></i></a>
+                      <a href="javascript:;" data-toggle="collapse" data-target="#project1"><i class="fa fa-fw fa-briefcase"></i> Spaces 1<i class="fa fa-fw fa-caret-down"></i></a>
                           <ul id="project1" class="collapse in">
                             <li>
-                              <a href="#"><i class="fa fa-fw fa-table"></i>Project 1.1</a>
+                              <a href="#"><i class="fa fa-fw fa-eye"></i>Project 1.1</a>
                             </li>
                             <li>
-                              <a href="#"><i class="fa fa-fw fa-table"></i>Project 1.2</a>
+                              <a href="#"><i class="fa fa-fw fa-eye"></i>Project 1.2</a>
                             </li>
                           </ul>
                     </li>
                     <li>
-                      <a href="javascript:;" data-toggle="collapse" data-target="#project2"><i class="fa fa-fw fa-arrows-v"></i> Spaces 2<i class="fa fa-fw fa-caret-down"></i></a>
+                      <a href="javascript:;" data-toggle="collapse" data-target="#project2"><i class="fa fa-fw fa-briefcase"></i> Spaces 2<i class="fa fa-fw fa-caret-down"></i></a>
                           <ul id="project2" class="collapse in">
                             <li>
-                              <a href="#"><i class="fa fa-fw fa-table"></i>Project 2.1</a>
+                              <a href="#"><i class="fa fa-fw fa-eye"></i>Project 2.1</a>
                             </li>
                             <li>
-                              <a href="#"><i class="fa fa-fw fa-table"></i>Project 2.2</a>
+                              <a href="#"><i class="fa fa-fw fa-eye"></i>Project 2.2</a>
                             </li>
                           </ul>
                     </li>
