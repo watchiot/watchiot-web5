@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+	<div class="panel-heading"><b>Change namespace</b></div>
+	<div class="panel-body">
+
+		<small>This change can be painful and break your applications.</small>
+
+		<%= form_for @space, url: '/' + param_user + '/' + @space.name + '/setting/change'  do |f| %>
+			<div class="form-group">
+
+				<%= div_for(@space, class: 'form-group col-lg-6') do %>
+					<label>Namespace</label>
+					<div>
+						<%= f.text_field :name, class: 'form-control', placeholder: 'Username', value: @space.name %>
+					</div>
+				<%end%>
+
+				<%= div_for(@space, class: 'form-group col-lg-9') do %>
+					<%= submit_tag 'Change', class: 'btn btn-warning' %>
+				<%end%>
+
+			</div>
+		<%end%>
+	</div>
+</div>

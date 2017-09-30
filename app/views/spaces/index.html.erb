@@ -1,0 +1,18 @@
+<% @title=param_user %>
+
+<div class="row dashboard-page">
+  <div class="">
+    <h3>Create a new space</h3>
+
+    <div class="panel panel-success">
+      <div class="panel-body">
+       <%= render 'create_space', object: @space%>
+      </div>
+    </div>
+
+    <br />
+    <div>
+			<%= render 'list_spaces', object: @spaces %>
+    </div>
+  </div>
+</div>

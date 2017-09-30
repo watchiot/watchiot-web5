@@ -1,0 +1,30 @@
+<%= render 'shared/alert_message'%>
+
+<%= form_for @space, url: '/' + param_user + '/' + @space.name  do |f| %>
+<div class="form-horizontal">
+	<%= div_for(@space, class: 'form-group') do %>
+		<label class="col-lg-2">Namespace</label>
+		<div class="col-lg-10">
+			<%= f.text_field :name, class: 'form-control', readonly: true %>
+		</div>
+	<% end %>
+
+	<%= div_for(@space, class: 'form-group') do %>
+		<label class="col-lg-2">Description</label>
+		<div class="col-lg-10">
+			<%= f.text_area :description, class: 'form-control' %>
+		</div>
+	<% end %>
+
+	<%= div_for(@space, class: 'form-group') do %>
+		<div class="col-lg-offset-2 col-lg-9">
+			<%= submit_tag 'Save Space', class: 'btn btn-primary' %>
+		</div>
+
+		<a href="/<%= param_user %>/<%= @space.name %>/setting" class="list-action clear-background" title="Setting space">
+			<i class="fa fa-cog fa-2x"></i>
+		</a>
+
+	<% end %>
+</div>
+<% end %>

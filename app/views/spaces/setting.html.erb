@@ -1,0 +1,22 @@
+<% @title='Setting ' + param_user + '/' + @space.name %>
+
+<div class="row dashboard-page index-setting">
+  <div class="">
+		<br />
+		<h3>Setting <%= @space.name %></h3>
+		<div class="panel panel-success">
+			<div class="panel-body">
+									<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="home">
+              <%= render 'shared/alert_message'%>
+
+							<%= render 'setting_name' %>
+							<%= render 'setting_transfer' %>
+							<%= render 'setting_delete' %>
+						</div>
+					</div>
+			</div>
+		</div>
+	</div>
+</div>
