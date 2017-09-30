@@ -12,3 +12,5 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
 Rails.application.config.assets.precompile += %w( scrollreveal.js typed.js home.js dashboard.js dashboard.scss )
+#Rails.application.config.assets.precompile << /\.(?:png|jpg|jpeg|gif)\z/
+#Rails.application.config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
