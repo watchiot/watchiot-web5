@@ -1,14 +1,14 @@
 <div class="row">
 		<div class="panel panel-success">
 			<div class="panel-body">
-				<h3><%= me.username %> setting</h3>
+				<h3>Setting <%= me.username %> </h3>
 				<br />
 
 				<ul class="nav nav-tabs" role="tablist">
-					<li role="presentation"<%if @in == ''%> class="active"<%end%>><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><h4>Profile</h4></a></li>
-					<li role="presentation"<%if @in == 'account'%> class="active"<%end%>><a href="#account" aria-controls="account" role="tab" data-toggle="tab"><h4>Account</h4></a></li>
-					<li role="presentation"<%if @in == 'team'%> class="active"<%end%>><a href="#team" aria-controls="team" role="tab" data-toggle="tab"><h4>Team</h4></a></li>
-					<li role="presentation"<%if @in == 'api'%> class="active"<%end%>><a href="#api" aria-controls="api" role="tab" data-toggle="tab"><h4>Api key</h4></a></li>
+					<li role="presentation"<%if @in == '' %> class="active"<%end%>><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><h4>Profile</h4></a></li>
+					<li role="presentation"<%if @in == 'account' %> class="active"<%end%>><a href="#account" aria-controls="account" role="tab" data-toggle="tab"><h4>Account</h4></a></li>
+					<li role="presentation"<%if @in == 'team' %> class="active"<%end%>><a href="#team" aria-controls="team" role="tab" data-toggle="tab"><h4>Team</h4></a></li>
+					<li role="presentation"<%if @in == 'api' %> class="active"<%end%>><a href="#api" aria-controls="api" role="tab" data-toggle="tab"><h4>Api key</h4></a></li>
 				</ul>
 
 				<div class="tab-content">

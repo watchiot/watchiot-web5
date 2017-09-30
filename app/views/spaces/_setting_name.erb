@@ -1,16 +1,16 @@
 <div class="panel panel-warning">
-	<div class="panel-heading"><b>Change namespace</b></div>
+	<div class="panel-heading"><b>Change space name</b></div>
 	<div class="panel-body">
 
-		<small>This change can be painful and break your applications.</small>
+		<small>This change can be painful and break your projects.</small>
 
 		<%= form_for @space, url: '/' + param_user + '/' + @space.name + '/setting/change'  do |f| %>
 			<div class="form-group">
 
 				<%= div_for(@space, class: 'form-group col-lg-6') do %>
-					<label>Namespace</label>
+					<label>Space name</label>
 					<div>
-						<%= f.text_field :name, class: 'form-control', placeholder: 'Username', value: @space.name %>
+						<%= f.text_field :name, class: 'form-control', placeholder: 'Space name', value: @space.name %>
 					</div>
 				<%end%>
 

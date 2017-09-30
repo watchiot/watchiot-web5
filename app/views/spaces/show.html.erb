@@ -1,26 +1,28 @@
 <% @title=param_user + '/' + @space.name %>
-
-<div class="row dashboard-page">
-  <div class="">
-		<br />
-		<br />
+<div class="row">
 		<div class="panel panel-success">
 			<div class="panel-body">
-				<%= render 'edit_space', object: @space %>
-			</div>
-		</div>
+        <h3>Edit space</h3>
+        <br />
+    		<div class="panel panel-success">
+    			<div class="panel-body">
+    				<%= render 'edit_space', object: @space %>
+    			</div>
+    		</div>
 
-		<br />
+    		<br />
 
-    <h3>Create a new project</h3>
-    <div class="panel panel-success">
-      <div class="panel-body">
-				<%= render 'projects/create_project', locals: {space: @space, project: @project} %>
-      </div>
-    </div>
-    <br />
-    <div>
-			<%= render 'projects/list_projects', object: @space %>
-		</div>
-	</div>
+        <h3>Create a new project</h3>
+        <br />
+        <div class="panel panel-success">
+          <div class="panel-body">
+    				<%= render 'projects/create_project', locals: {space: @space, project: @project} %>
+          </div>
+        </div>
+        <br />
+        <div>
+    			<%= render 'projects/list_projects', object: @space %>
+    		</div>
+    	</div>
+  </div>
 </div>
