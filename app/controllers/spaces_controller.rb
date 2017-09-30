@@ -4,7 +4,7 @@
 class SpacesController < ApplicationController
   layout 'dashboard'
 
-  before_action:allow
+  before_action :allow
   before_action :allow_space, :except => [:index, :create]
 
   ##

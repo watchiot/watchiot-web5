@@ -1,0 +1,49 @@
+<h3>List of Project</h3>
+<div class="panel panel-success">
+	<div class="panel-body">
+		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingOne">
+					<div class="row">
+						<% unless @space.projects.any?%>
+							<p class="text-center">Does not exist projects that belong to this Space.</p>
+						<%else%>
+						<table class="table table-striped">
+							<colgroup>
+								<col class="col-xs-2">
+								<col class="col-xs-6">
+								<col class="col-xs-2">
+							</colgroup>
+							<thead>
+							<tr>
+								<th>Project Name</th>
+								<th>Project Description</th>
+								<th></th>
+							</tr>
+							</thead>
+							<tbody>
+							<% @space.projects.each do |project| %>
+							<tr>
+								<th scope="row"><%= project.name %></th>
+								<td><%= project.description %></td>
+								<td>
+									<%= link_to '/' + param_user + '/' + @space.name + '/' + project.name, class: 'list-action clear-background', title: 'Edit project', method: :get  do %>
+										<i class="fa fa-pencil-square-o fa-2x"></i>
+									<%end%>
+
+									<%= link_to '/' + param_user + '/' + @space.name + '/' + project.name + '/setting', class: 'list-action clear-background', title: 'Setting project'  do %>
+										<i class="fa fa-cog fa-2x"></i>
+									<%end%>
+								</td>
+							</tr>
+							<% end %>
+							</tbody>
+						</table>
+						<%end%>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>

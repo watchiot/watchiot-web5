@@ -61,8 +61,7 @@ class Project < ApplicationRecord
   # delete a project
   #
   def delete_project(name)
-    if name.nil? || name.downcase != self.name
-      raise StandardError, 'The project name is not valid'
+    raise StandardError, 'The project name is not valid' if name.nil? || name.downcase != self.name
 
     destroy!
   end
@@ -114,7 +113,7 @@ class Project < ApplicationRecord
   #
   def self.fix_error_line(errors)
     return if errors.nil? || errors.empty?
-    
+
     errors.each do |key, value|
       row = value.row
       row_i = row.to_i - 1

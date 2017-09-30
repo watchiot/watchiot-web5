@@ -1,0 +1,32 @@
+<%= form_for @project, url: '/' + param_user + '/' + @space.name + '/create' do |f| %>
+<div class="form-horizontal">
+
+	<%= div_for(@project, class: 'form-group') do %>
+		<label class="col-lg-2">Project Name</label>
+		<div class="col-lg-10">
+			<%= f.text_field :name, class: 'form-control' %>
+		</div>
+	<% end %>
+
+	<%= div_for(@project, class: 'form-group') do %>
+		<label class="col-lg-2">Description</label>
+		<div class="col-lg-10">
+			<%= f.text_area :description, class: 'form-control' %>
+		</div>
+	<% end %>
+
+	<%= div_for(@project, class: 'form-group') do %>
+		<label class="col-lg-2">Project Config</label>
+		<div class="col-lg-10">
+			<input type="file" class="btn btn-default" />
+		</div>
+	<% end %>
+
+	<%= div_for(@project, class: 'form-group') do %>
+		<div class="col-lg-offset-2 col-lg-6">
+			<%= submit_tag 'Create Project', class: 'btn btn-primary' %>
+		</div>
+	<% end %>
+
+</div>
+<% end %>
