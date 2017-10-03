@@ -17,3 +17,4 @@
 //= require turbolinks
 //= require jquery.easing
 //= require typed
+//= require Chart.min

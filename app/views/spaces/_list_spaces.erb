@@ -1,5 +1,6 @@
 <h3>Spaces list</h3>
 <br />
+
 <div class="panel panel-success">
 	<div class="panel-body">
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -10,41 +11,54 @@
 			<div class="panel panel-default">
 				<div class="panel-heading" role="tab" id="heading<%= space.id %>">
 					<div class="row">
-						<h4 class="panel-title ">
-							<a class="collapsed col-lg-10 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= space.id %>" aria-expanded="false" aria-controls="collapse<%= space.id %>">
-								<%= space.name %>
-							</a>
-						</h4>
 						<div class="col-lg-2">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"  title="Show projects" href="#collapse<%= space.id %>" aria-expanded="false" aria-controls="collapse<%= space.id %>">
+								<i class="fa fa-chevron-circle-down fa-2x" aria-hidden="true"></i></a>
 							<a href="/<%= param_user %>/<%= space.name %>" class="list-action clear-background" title="Edit space"><i class="fa fa-pencil-square-o fa-2x"></i></a>
 							<a href="/<%= param_user %>/<%= space.name %>/setting" class="list-action clear-background" title="Setting space"><i class="fa fa-cog fa-2x"></i></a>
 						</div>
+
+						<div class="col-lg-10">
+							<h2 class="panel-title">
+								<strong><%= space.name %></strong>
+							</h2>
+						</div>
 					</div>
 				</div>
+
 				<div id="collapse<%= space.id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= space.id %>">
 					<div class="panel-body">
 						<% unless space.projects.any?%>
-							<p class="text-center">Does not exist projects that belong to this space.</p>
+							<p class="text-center">Don't exist projects that belong to this space.</p>
 						<%else%>
 						<table class="table table-striped">
 							<colgroup>
+								<col class="col-xs-1">
 								<col class="col-xs-2">
 								<col class="col-xs-7">
-								<col class="col-xs-1">
 							</colgroup>
 							<thead>
 							<tr>
+								<th>Actions</th>
 								<th>Project Name</th>
 								<th>Project Description</th>
-								<th></th>
 							</tr>
 							</thead>
 							<tbody>
 							<% space.projects.each do |project|%>
 							<tr>
-								<th scope="row"><%= project.name%></th>
+								<th scope="row">
+
+									<%= link_to '/' + param_user + '/' + space.name + '/' + project.name, class: 'list-action clear-background', title: 'Edit project', method: :get  do %>
+										<i class="fa fa-pencil-square-o fa-2x"></i>
+									<%end%>
+
+									<%= link_to '/' + param_user + '/' + space.name + '/' + project.name + '/setting', class: 'list-action clear-background', title: 'Setting project'  do %>
+										<i class="fa fa-cog fa-2x"></i>
+									<%end%>
+								</th>
+								<td><%= project.name%></td>
 								<td><%= project.description%></td>
-								<td><a href="/<%= param_user %>/<%= space.name %>/<%= project.name %>" class="clear-background" title="Go to project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
 							</tr>
 							<% end %>
 							</tbody>

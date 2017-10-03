@@ -46,6 +46,8 @@ gem 'figaro'
 
 gem 'omniauth-github'
 
+gem 'chart-js-rails'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
