@@ -113,6 +113,8 @@ class ApplicationController < ActionController::Base
   # if the request was doing for the user login or an user team
   #
   def allow
+    raise Errors::UnauthorizedError if me == nil
+
     @user = User.find_by_username(params[:username]) || not_found
     @user if auth? && @user.username == me.username ||
           Team.find_member(@user.id, me.id).exists? || unauthorized

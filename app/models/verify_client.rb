@@ -38,5 +38,5 @@ class VerifyClient < ApplicationRecord
     verifyClient.save!
 
     verifyClient.token
-end
+  end
 end
