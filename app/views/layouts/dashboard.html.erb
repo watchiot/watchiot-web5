@@ -36,5 +36,11 @@
     <!-- /#wrapper -->
 
     <%= javascript_include_tag "dashboard" %>
+    <% if flash[:error] %>
+    <%= js add_gritter(flash[:error], title: "Error", sticky: false, image: :error) %>
+    <% end %>
+    <% if flash[:notice] %>
+    <%= js add_gritter(flash[:notice], title: "Success", sticky: false, image: :success) %>
+    <% end %>
 </body>
 </html>

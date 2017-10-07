@@ -83,6 +83,7 @@ GEM
       sass (>= 3.2)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
+    gritter (1.2.0)
     hashie (3.5.6)
     i18n (0.8.6)
     jbuilder (2.7.0)
@@ -229,6 +230,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   figaro
   font-awesome-sass
+  gritter
   jbuilder (~> 2.5)
   jquery-easing-rails
   jquery-rails

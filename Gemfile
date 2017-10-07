@@ -48,6 +48,8 @@ gem 'omniauth-github'
 
 gem 'chart-js-rails'
 
+gem 'gritter'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

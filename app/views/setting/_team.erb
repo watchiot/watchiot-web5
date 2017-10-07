@@ -2,8 +2,6 @@
 		<div class="panel-body">
 			<div data-example-id="simple-table" class="bs-example">
 
-				<%= render 'shared/alert_message'%>
-
 				<div class="panel panel-default">
 					<div class="panel-heading"><b>Add a new member</b></div>
 					<div class="panel-body">
@@ -29,8 +27,8 @@
 
 				<table class="table table-striped">
 					<colgroup>
-						<col class="col-xs-9">
-						<col class="col-xs-3">
+						<col class="col-xs-2">
+						<col class="col-xs-10">
 					</colgroup>
 					<thead>
 					<tr>
@@ -42,14 +40,14 @@
 					<% @teams.each do |team| %>
 						<tr>
 							<td>
-								<img class="img-circle" data-email="<%= user_email(team.user_team_id) %>" width="23" height="23">
-								<%= user_name(team.user_team_id) %> (<b><%= user_email(team.user_team_id) %></b>)
-							</td>
-							<td>
 								<%= link_to '/' + me.username + '/setting/team/delete/' + team.user_team_id.to_s,
 														method: :delete , class: 'list-action clear-background' do%>
 									<i class="fa fa-trash fa-2x"></i>
 								<%end%>
+							</td>
+							<td>
+								<img class="img-circle" data-email="<%= user_email(team.user_team_id) %>" width="23" height="23">
+								<%= user_name(team.user_team_id) %> (<b><%= user_email(team.user_team_id) %></b>)
 							</td>
 						</tr>
 					<%end%>
@@ -58,8 +56,8 @@
 
 				<table class="table table-striped">
 					<colgroup>
-						<col class="col-xs-9">
-						<col class="col-xs-3">
+						<col class="col-xs-2">
+						<col class="col-xs-10">
 					</colgroup>
 					<thead>
 					<tr>
@@ -71,11 +69,11 @@
 					<% @teams_belong.each do |team| %>
 						<tr>
 							<td>
-								<img class="img-circle" data-email="<%= user_email(team.user_id) %>" width="23" height="23">
-								<%= user_name(team.user_id) %> (<b><%= user_email(team.user_id) %></b>)
+								<%=link_to  'Go', '/' + user_name(team.user_id)%>
 							</td>
 							<td>
-								<%=link_to  'Go', '/' + user_name(team.user_id)%>
+								<img class="img-circle" data-email="<%= user_email(team.user_id) %>" width="23" height="23">
+								<%= user_name(team.user_id) %> (<b><%= user_email(team.user_id) %></b>)
 							</td>
 						</tr>
 					<%end%>

@@ -26,5 +26,8 @@
 
     <%= yield %>
     <%= render 'layouts/footer' %>
+    <% if flash[:error] %>
+    <%= js add_gritter(flash[:error], title: "Error", sticky: false, image: :error) %>
+    <% end %>  
   </body>
 </html>
