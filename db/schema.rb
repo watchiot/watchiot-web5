@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170719035832) do
+ActiveRecord::Schema.define(version: 20171011034415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,12 @@ ActiveRecord::Schema.define(version: 20170719035832) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "countries", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.string "prefix"
   end
 
   create_table "descrips", force: :cascade do |t|
@@ -156,6 +162,7 @@ ActiveRecord::Schema.define(version: 20170719035832) do
     t.bigint "api_key_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "countryCode"
     t.index ["api_key_id"], name: "index_users_on_api_key_id"
     t.index ["plan_id"], name: "index_users_on_plan_id"
     t.index ["status"], name: "index_users_on_status"
