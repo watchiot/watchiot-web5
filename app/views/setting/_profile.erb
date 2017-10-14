@@ -33,7 +33,7 @@
 					<%= div_for(me, class: 'form-group col-lg-6') do %>
 						<label>Location</label>
 						<div class="controls">
-							<%= select_tag 'user[country_code]', options_for_select(@countries.collect{ |u| [u.name, u.code + '(+ ' + u.prefix +')'] }), class: 'form-control' %>							
+							<%= f.select :country_code, @countries.all.collect { |u| [u.name, u.code]}, include_blank: true, class: 'form-control' %>
 						</div>
 					<% end %>
 

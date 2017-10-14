@@ -14,6 +14,7 @@ class SettingController < ApplicationController
     @emails = Email.find_by_user(@user.id)
     @teams = Team.my_teams(@user.id)
     @teams_belong = Team.belong_to @user.id
+    @countries = Country.all
     @in = valid_tab? ? params[:val] : ''
   end
 
@@ -27,7 +28,7 @@ class SettingController < ApplicationController
 
     flash_log('Edit the profile setting', 'Profile was updated correctly')
   rescue => ex
-    flash[:error] = 'Profile update failed'
+    flash[:error] = ex.message
   end
 
   ##
