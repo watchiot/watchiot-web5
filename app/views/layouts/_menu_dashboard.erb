@@ -20,17 +20,25 @@
             </a>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="/<%= me.username %>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    <a href="/<%= param_user %>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                 </li>
                 <li>
-                    <a href="/<%= me.username %>/chart"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
+                    <a href="/<%= param_user %>/chart"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
                 </li>
+                <%if me.username == param_user %>
                 <li>
-                    <a href="/<%= me.username %>/setting"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                    <a href="/<%= param_user %>/setting"><i class="fa fa-fw fa-gear"></i> Settings</a>
                 </li>
+                <%end%>
                 <li>
-                    <a href="/<%= me.username %>/spaces"><i class="fa fa-fw fa-briefcase"></i>  Spaces</a>
+                    <a href="/<%= param_user %>/spaces"><i class="fa fa-fw fa-briefcase"></i>  Spaces</a>
                 </li>
+                <%if me.username != param_user %>
+                <li class="divider"></li>
+                <li>
+                    <a href="/<%= me.username %>"><i class="fa fa-fw fa-arrow-circle-left"></i> Go back</a>
+                </li>
+                <%end%>
                 <li class="divider"></li>
                 <li>
                     <a href="/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
@@ -42,16 +50,18 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
             <li id="dashboard">
-                <a href="/<%= me.username %>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                <a href="/<%= param_user %>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
             </li>
             <li id="chart">
-                <a href="/<%= me.username %>/chart"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
+                <a href="/<%= param_user %>/chart"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
             </li>
+            <%if me.username == param_user %>
             <li id="setting">
-                <a href="/<%= me.username %>/setting"><i class="fa fa-fw fa-gear"></i> Setting</a>
+                <a href="/<%= param_user %>/setting"><i class="fa fa-fw fa-gear"></i> Setting</a>
             </li>
+            <%end%>
             <li id="spaces">
-                <a href="/<%= me.username %>/spaces"><i class="fa fa-fw fa-briefcase"></i>  Spaces</a>
+                <a href="/<%= param_user %>/spaces"><i class="fa fa-fw fa-briefcase"></i>  Spaces</a>
             </li>
         </ul>
     </div>

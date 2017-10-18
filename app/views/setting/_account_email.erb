@@ -22,21 +22,18 @@
 				<tr>
 					<td>
 						<%unless email.primary? %>
-
 							<%if email.checked?%>
 								<%= link_to  '/' + me.username + '/setting/account/primary/email/' + email.id.to_s,
-														class: 'clear-background' do %><i class="fa fa-check-circle-o fa-2x" title="Check like primary"></i>
-								<%end%>
+														class: 'clear-background' do %><i class="fa fa-check-circle-o fa-2x" title="Check like primary"></i><%end%>
 							<%else%>
 								<%= link_to  '/' + me.username + '/setting/account/verify/email/' + email.id.to_s,
-														class: 'clear-background' do %><i class="fa fa-check-circle fa-2x" title="Verify email"></i>
-								<%end%>
+														class: 'clear-background' do %><i class="fa fa-check-circle fa-2x" title="Verify email"></i><%end%>
 							<%end%>
 
-							<%= link_to  '/' + me.username + '/setting/account/remove/email/'+ email.id.to_s,
-													method: :delete, class: 'clear-background' do %><i class="fa fa-trash fa-2x" title="Delete the email"></i>
-							<%end%>
+						<%= link_to  '/' + me.username + '/setting/account/remove/email/'+ email.id.to_s,
+												method: :delete, class: 'clear-background' do %><i class="fa fa-trash fa-2x" title="Delete the email"></i>
 						<%end%>
+					<%end%>
 					</td>
 					<td><%= email.email%></td>
 					<td><%if email.primary? %><i class="fa fa-check"></i><%end%></td>

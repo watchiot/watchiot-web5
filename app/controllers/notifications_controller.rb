@@ -78,6 +78,10 @@ class NotificationsController < ApplicationController
   #
   def invite
     @token = params[:token]
+
+    team = Team.belong_to(@user.id).take
+    @userTeam = User.find_by_id team.user_id
+
     render 'users/invited'
   end
 
@@ -85,6 +89,11 @@ class NotificationsController < ApplicationController
   # Patch /do_invited
   #
   def do_invite
+    @token = params[:token]
+
+    team = Team.belong_to(@user.id).take
+    @userTeam = User.find_by_id team.user_id
+    
     email = Email.to_activate_by_invitation(@verifyClient.user_id, @verifyClient.data)
     @user.invite user_params, email
     @verifyClient.destroy!

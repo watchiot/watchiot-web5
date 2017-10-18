@@ -32,8 +32,8 @@
 					</colgroup>
 					<thead>
 					<tr>
+						<th>Action</th>
 						<th>Members in my team</th>
-						<th></th>
 					</tr>
 					</thead>
 					<tbody>
@@ -61,15 +61,17 @@
 					</colgroup>
 					<thead>
 					<tr>
+						<th>Action</th>
 						<th>Participate in teams</th>
-						<th></th>
 					</tr>
 					</thead>
 					<tbody>
 					<% @teams_belong.each do |team| %>
 						<tr>
 							<td>
-								<%=link_to  'Go', '/' + user_name(team.user_id)%>
+								<%= link_to '/' + user_name(team.user_id) do%>
+									<i class="fa fa-arrow-circle-o-right  fa-2x"></i>
+								<%end%>
 							</td>
 							<td>
 								<img class="img-circle" data-email="<%= user_email(team.user_id) %>" width="23" height="23">
