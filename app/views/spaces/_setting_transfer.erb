@@ -10,10 +10,10 @@
 				<%= div_for(@space, class: 'form-group col-lg-6') do %>
 					<label>Transfer to</label>
 					<div>
-						<select name="team_id">
+						<select name="user_team_id">
 							<option value="">Please select a member team</option>
 							<%@teams.each do |team| %>
-							<option value="<%= team.user_team_id%> "><%= user_email(team.user_team_id) %></option>
+							<option value="<%= team.user_team_id %> "><%= user_email(team.user_team_id) %></option>
 							<%end%>
 						</select>
 					</div>

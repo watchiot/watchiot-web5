@@ -56,7 +56,7 @@ class Space < ApplicationRecord
   ##
   # Transfer space and projects to a member team
   #
-  def transfer(user, user_member_id)
+  def transfer(user, user_member_id, member_email)
     raise StandardError, 'The member is not valid' if user.nil? || user_member_id.nil? || !Team.find_member(user.id, user_member_id).exists?
 
 
@@ -66,8 +66,7 @@ class Space < ApplicationRecord
 
     transfer_projects user_member_id
 
-    member_email = Email.find_primary_by_user(user_member_id).take
-    Notifier.send_transfer_space_email(member_email, user, self)
+    Notifier.send_transfer_space_email(member_email.email, user, self)
         .deliver_later unless member_email.nil?
   end
 

@@ -78,12 +78,18 @@ class SpacesController < ApplicationController
   # Patch /:username/:namespace/setting/transfer
   #
   def transfer
-    @space.transfer @user, params[:user_member_id]
+    email_member = Email.find_primary_by_user(params[:user_team_id]).take
+    my_email = Email.find_primary_by_user(@user.id).take
 
-    email_member = Email.find_primary_by_user(params[:user_member_id]).take
+    @space.transfer @user, params[:user_team_id], email_member   
+
     flash_log('Change the owner of space <b>' + @space.name +
                 '</b> to <b>' + email_member.email + '</b>',
                 'The space was transferred correctly')
+
+    flash_log('Change the owner of space <b>' + @space.name +
+                '</b> from <b>' + my_email.email + '</b> to you!',
+                'The space was transferred correctly', params[:user_team_id])
 
     redirect_to '/' + @user.username + '/spaces'
   rescue => ex
@@ -131,8 +137,8 @@ class SpacesController < ApplicationController
   ##
   # Set flash and log
   #
-  def flash_log(log_description, msg)
-    save_log log_description, 'Space', @user.id
+  def flash_log(log_description, msg, userId = @user.id)
+    save_log log_description, 'Space', userId
     flash[:notice] = msg
   end
 
