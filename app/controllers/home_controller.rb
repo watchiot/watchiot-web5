@@ -12,4 +12,7 @@ class HomeController < ApplicationController
     @descrips = Descrip.where(lang: 'en').all
     @faqs = Faq.where(lang: 'en').all
   end
+
+  def terms_and_conditions
+  end
 end

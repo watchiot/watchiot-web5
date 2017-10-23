@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   get 'download' => 'download#index', as: 'download'
   get 'home' => 'home#index', as: 'index'
+  get 'terms_and_conditions' => 'home#terms_and_conditions', as: 'terms_and_conditions'
 
   get '/:username', controller: 'dashboard', action: 'show'
 
