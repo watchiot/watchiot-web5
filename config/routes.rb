@@ -18,7 +18,8 @@ Rails.application.routes.draw do
   get 'verify_email/:token', controller: 'notifications', action: 'verify_email'
   get 'invite/:token', controller: 'notifications', action: 'invite'
   patch 'invite/:token', controller: 'notifications', action: 'do_invite'
-
+  get 'unsubscribe/:token', controller: 'notifications', action: 'unsubscribe'
+  
   get 'download' => 'download#index', as: 'download'
   get 'home' => 'home#index', as: 'index'
   get 'terms_and_conditions' => 'home#terms_and_conditions', as: 'terms_and_conditions'

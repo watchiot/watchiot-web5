@@ -205,7 +205,7 @@ class SettingController < ApplicationController
   #
   def profile_params
     params.require(:user).permit(:first_name, :last_name, :country_code,
-                                 :address, :phone, :receive_notif_last_new)
+                                 :address, :phone, :receive_notif, :receive_notif_last_new)
   end
 
   ##

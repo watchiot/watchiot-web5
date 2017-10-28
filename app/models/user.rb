@@ -90,7 +90,7 @@ class User < ApplicationRecord
     User.create_user_with_email(user, email)
 
     token = VerifyClient.token(user.id, email_member, 'invited')
-    Notifier.send_create_user_email(email_member, token).deliver_later
+    Notifier.send_create_user_email(email_member, user, token).deliver_later
     user
   end
 
@@ -114,6 +114,16 @@ class User < ApplicationRecord
 
     token = VerifyClient.token(user.id, email, 'reset')
     Notifier.send_forget_passwd_email(email.email, user, token).deliver_later
+  end
+
+  ##
+  # Unsubscribe email news
+  #
+  def self.unsubscribe(token)
+    user = User.find_by_unsubscribe_token(token)
+    raise StandardError, 'Bad token' if user.nil?
+
+    user.update!(receive_notif_last_new: false)
   end
 
   ##
@@ -250,6 +260,7 @@ class User < ApplicationRecord
     begin
       user.auth_token = SecureRandom.urlsafe_base64
     end while User.exists?(auth_token: user.auth_token)
+    user.unsubscribe_token = SecureRandom.urlsafe_base64
   end
 
   ##

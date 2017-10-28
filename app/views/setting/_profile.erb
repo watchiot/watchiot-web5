@@ -53,6 +53,13 @@
 
 					<br />
 					<%= div_for(me, class: 'form-group col-lg-12') do %>
+						<small>If you want to receive projects alerts and notifications.</small>
+						<br />
+						<label>
+							<%= f.check_box :receive_notif %> Receive projects alerts/notifications
+						</label>
+					<%end%>
+					<%= div_for(me, class: 'form-group col-lg-12') do %>
 						<small>If you want to receive notification with the latest news by email.</small>
 						<br />
 						<label>

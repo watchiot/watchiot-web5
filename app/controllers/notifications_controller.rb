@@ -93,7 +93,7 @@ class NotificationsController < ApplicationController
 
     team = Team.belong_to(@user.id).take
     @userTeam = User.find_by_id team.user_id
-    
+
     email = Email.to_activate_by_invitation(@verifyClient.user_id, @verifyClient.data)
     @user.invite user_params, email
     @verifyClient.destroy!
@@ -103,6 +103,16 @@ class NotificationsController < ApplicationController
   rescue => ex
     flash.now[:error] = clear_exception ex.message
     render 'users/invited'
+  end
+
+  ##
+  # Unsubscribe email news
+  #
+  def unsubscribe
+    User.unsubscribe(params[:token])
+    render 'users/unsubscribe'
+  rescue => ex
+    redirect_to '/'
   end
 
   private
