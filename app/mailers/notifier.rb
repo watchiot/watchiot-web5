@@ -72,8 +72,26 @@ class Notifier < ApplicationMailer
   def send_reset_passwd_email(email, user)
     @url = ENV['URL']
     @user = user
-    
+
     mail( :to => email,
           :subject => 'WatchIoT password reset correctly!!')
+  end
+
+  # send an email when you discart this as primary email
+  def send_not_primary_email(email, user)
+    @url = ENV['URL']
+    @user = user
+
+    mail( :to => email,
+          :subject => 'WatchIoT change the primary email!!')
+  end
+
+  # send an email when you selectc a new primary email
+  def send_new_primary_email(email, user)
+    @url = ENV['URL']
+    @user = user
+
+    mail( :to => email,
+          :subject => 'WatchIoT new primary email!!')
   end
 end

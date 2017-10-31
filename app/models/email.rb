@@ -79,20 +79,27 @@ class Email < ApplicationRecord
   ##
   # Set this email id like primary
   #
-  def self.primary(user_id, email_id)
-    email = find_by_user_and_by_id(user_id, email_id).take
+  def self.primary(user, email_id)
+    new_email_primary = find_by_user_and_by_id(user.id, email_id).take
 
-    raise StandardError, 'The email is not valid' if email.nil?
-    raise StandardError, 'The email has to be check' unless email.checked?
-    raise StandardError, 'The email already is primary in your account' if email.primary
+    raise StandardError, 'The email is not valid' if new_email_primary.nil?
+    raise StandardError, 'The email has to be check' unless new_email_primary.checked?
+    raise StandardError, 'The email already is primary in your account' if new_email_primary.primary
     raise StandardError, 'The email is primary in other account' if
-          Email.find_primary_by_email(email.email).exists?
+          Email.find_primary_by_email(new_email_primary.email).exists?
 
     # set like not primary if exist the current primary email
-    Email.unprimary(user_id)
-    email.update!(primary: true)
+    old_email_primary = Email.find_primary_by_user(user.id).take
 
-    email
+    ActiveRecord::Base.transaction do
+      old_email_primary.update!(primary: false) unless old_email_primary.nil?
+      new_email_primary.update!(primary: true)
+    end
+
+    Notifier.send_not_primary_email(old_email_primary.email, user).deliver_later unless old_email_primary.nil?   
+    Notifier.send_new_primary_email(new_email_primary.email, user).deliver_later
+
+    new_email_primary
   end
 
   ##
@@ -170,15 +177,5 @@ class Email < ApplicationRecord
   #
   def downcase_email
     self.email = self.email.downcase unless self.email.nil?
-  end
-
-  private
-
-  ##
-  # Find the primary email for this user and set it like not primary
-  #
-  def self.unprimary(user_id)
-    email_primary = Email.find_primary_by_user(user_id).take
-    email_primary.update!(primary: false) unless email_primary.nil?
   end
 end

@@ -66,7 +66,7 @@ class SettingController < ApplicationController
   def account_primary_email
     redirect_to '/' + @user.username + '/setting/account'
 
-    email = Email.primary(@user.id, params[:id])
+    email = Email.primary(@user, params[:id])
 
     flash_log('Set email <b>' + email.email + '</b> like primary',
               'The email was setted like primary correctly')
