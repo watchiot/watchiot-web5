@@ -23,6 +23,7 @@
 #
 
 class User < ApplicationRecord
+
   attr_accessor :passwd_new, :remember_me
 
   has_many :teams
@@ -47,7 +48,6 @@ class User < ApplicationRecord
                          message: '"%{value}" is reserved.' }
 
   before_validation :username_format
-
   ## -------------------------- Instance method ------------------------------ ##
 
   ##
@@ -245,10 +245,11 @@ class User < ApplicationRecord
     user.passwd_salt = BCrypt::Engine.generate_salt
     user.passwd = BCrypt::Engine.hash_secret(user.passwd, user.passwd_salt)
     user.status = checked
+    user.unsubscribe_token = SecureRandom.urlsafe_base64
 
-    generate_token(user)
     generate_api_key(user)
     assign_plan(user)
+    generate_token(user)
 
     user.save!
   end
@@ -260,7 +261,7 @@ class User < ApplicationRecord
     begin
       user.auth_token = SecureRandom.urlsafe_base64
     end while User.exists?(auth_token: user.auth_token)
-    user.unsubscribe_token = SecureRandom.urlsafe_base64
+
   end
 
   ##

@@ -93,9 +93,12 @@ def before_each(type_test)
     PlanFeature.create(plan_id: plan.id,
                        feature_id: fNotifHook.id, value: 'false')
 
+
+     api = ApiKey.create(api_key: SecureRandom.uuid)
+
     # add two users
     @user = User.create!(username: 'my_user_name',
-                         passwd: '12345678')
+                         passwd: '12345678', plan: plan, api_key: api)
 
     @email = Email.create!(email: 'user@watchiot.com',
                            user_id: @user.id)
@@ -111,7 +114,7 @@ def before_each(type_test)
        'notif'         == type_test
 
       @user_two = User.create!(username: 'my_user_name1',
-                               passwd: '12345678')
+                               passwd: '12345678', plan_id: plan.id, api_key: api.id)
 
       @email_two = Email.create!(email: 'user1@watchiot.com',
                                  user_id: @user_two.id,
