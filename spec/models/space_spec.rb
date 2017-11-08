@@ -139,7 +139,7 @@ RSpec.describe Space, type: :model do
 
     it 's valid delete a space with projects' do
       space = Space.create_new_space(params, @user, @user)
-      project = Project.create!(name: 'project', space_id: space.id)
+      project = Project.create!(name: 'project', space: space, user: @user)
 
       expect { space.delete_space('space') }
           .to raise_error('This space can not be delete because '\
@@ -156,7 +156,7 @@ RSpec.describe Space, type: :model do
       params = { name: 'space', description: 'space description'}
       space = Space.create_new_space(params, @user, @user)
 
-      expect { space.transfer(@user, @user_two.id) }
+      expect { space.transfer(@user, @user_two.id, @email_two) }
           .to raise_error('The member is not valid')
     end
 
@@ -165,10 +165,11 @@ RSpec.describe Space, type: :model do
       space = Space.create_new_space(params, @user, @user)
 
       Team.add_member(@user, @email_two.email)
-      expect { space.transfer(@user, @user_two.id) }
-          .to change { ActionMailer::Base.deliveries.count }
-                  .by(1)
-
+      ActiveJob::Base.queue_adapter = :test
+      expect {
+        space.transfer(@user, @user_two.id, @email_two)
+      }.to have_enqueued_job.on_queue('mailers')
+      
       # user do not have space
       expect(Space.count_by_user @user.id).to eq(0)
 
@@ -188,7 +189,7 @@ RSpec.describe Space, type: :model do
       space = Space.create_new_space(params, @user, @user)
 
       # we can not transfer a space with the same name
-      expect { space.transfer(@user, @user_two.id) }
+      expect { space.transfer(@user, @user_two.id, @email_two) }
           .to raise_error(/You have a space with this name/)
     end
 
@@ -204,7 +205,7 @@ RSpec.describe Space, type: :model do
       params = { name: 'space', description: 'space description'}
       space = Space.create_new_space(params, @user, @user)
 
-      expect { space.transfer(@user, @user_two.id) }
+      expect { space.transfer(@user, @user_two.id, @email_two) }
           .to raise_error('The team member can not add more '\
           'spaces, please contact with us!')
     end

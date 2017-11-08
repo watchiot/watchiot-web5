@@ -18,9 +18,10 @@ RSpec.describe Team, type: :model do
 
   describe 'valid add a member' do
     it 'is valid add a new member' do
-      expect { Team.add_member(@user, 'user1@watchiot.com') }
-          .to change { ActionMailer::Base.deliveries.count }
-                  .by(1)
+      ActiveJob::Base.queue_adapter = :test
+      expect {
+        Team.add_member(@user, 'user1@watchiot.com')
+      }.to have_enqueued_job.on_queue('mailers')
 
       expect(@user.teams.length).to eq(1)
       expect(@user.teams.first.user_team_id)
@@ -43,9 +44,10 @@ RSpec.describe Team, type: :model do
     end
 
     it 'is valid add the same member' do
-      expect { Team.add_member(@user, 'user1@watchiot.com') }
-          .to change { ActionMailer::Base.deliveries.count }
-                  .by(1)
+      ActiveJob::Base.queue_adapter = :test
+      expect {
+        Team.add_member(@user, 'user1@watchiot.com')
+      }.to have_enqueued_job.on_queue('mailers')
 
       expect { Team.add_member(@user, 'user1@watchiot.com') }
           .to raise_error('The member was added before')
@@ -55,9 +57,10 @@ RSpec.describe Team, type: :model do
   describe 'valid add a new member dont register' do
     it 'is valid add a new member dont register' do
       # send two emails for register and added to the team
-      expect { Team.add_member(@user, 'user_dont_exist@watchiot.com') }
-          .to change { ActionMailer::Base.deliveries.count }
-                  .by(2)
+      ActiveJob::Base.queue_adapter = :test
+      expect {
+        Team.add_member(@user, 'user_dont_exist@watchiot.com')
+      }.to have_enqueued_job.on_queue('mailers').at_least(2)
 
       username = ('user_dont_exist@watchiot.com'.gsub! /[^0-9a-z\- ]/i, '_')
                      .byteslice 0 , 24
@@ -81,16 +84,20 @@ RSpec.describe Team, type: :model do
 
   describe 'valid add a new member of two accounts' do
     it 'is valid add a new member of two accounts and one of they are primary' do
+
+      api = ApiKey.create(api_key: SecureRandom.uuid)
+      plan = Plan.create!(name: 'Free', amount_per_month: 0)
+
       user_tree = User.create!(username: 'my_user_name2',
-                               passwd: '12345678',
-                               passwd_confirmation: '12345678')
+                               passwd: '12345678', api_key: api ,plan: plan)
       # not primary email
       email_tree = Email.create!(email: 'user1@watchiot.com',
                                  user_id: user_tree.id)
 
-      expect { Team.add_member(@user, 'user1@watchiot.com') }
-          .to change { ActionMailer::Base.deliveries.count }
-                  .by(1)
+      ActiveJob::Base.queue_adapter = :test
+      expect {
+        Team.add_member(@user, 'user1@watchiot.com')
+      }.to have_enqueued_job.on_queue('mailers')
 
       # the account with the primary email was add
       member = Team.find_member(@user.id, @user_two.id).take
@@ -101,15 +108,18 @@ RSpec.describe Team, type: :model do
     end
 
     it 'is valid add a new member in two account and nobody are primary' do
+      api = ApiKey.create(api_key: SecureRandom.uuid)
+      plan = Plan.create!(name: 'Free', amount_per_month: 0)
+
       user_tree = User.create!(username: 'my_user_name2',
-                               passwd: '12345678',
-                               passwd_confirmation: '12345678')
+                               passwd: '12345678', api_key: api, plan: plan)
+
       email_tree = Email.create!(email: 'user3@watchiot.com',
                                  user_id: user_tree.id)
-
+      api = ApiKey.create(api_key: SecureRandom.uuid)
       user_four = User.create!(username: 'my_user_name3',
-                               passwd: '12345678',
-                               passwd_confirmation: '12345678')
+                               passwd: '12345678', api_key: api, plan: plan)
+
       email_four = Email.create!(email: 'user3@watchiot.com',
                                  user_id: user_four.id)
       # the email has to be primary
@@ -120,15 +130,18 @@ RSpec.describe Team, type: :model do
 
   describe 'valid add members with overflow the plan' do
     it 'is valid add more that 2 members for the free plan' do
+
+      api = ApiKey.create(api_key: SecureRandom.uuid)
+      plan = Plan.create!(name: 'Free', amount_per_month: 0)
+
       user_tree = User.create!(username: 'my_user_name2',
-                               passwd: '12345678',
-                               passwd_confirmation: '12345678')
+                               passwd: '12345678', api_key: api, plan: plan)
       email_tree = Email.create!(email: 'user2@watchiot.com',
                                  user_id: user_tree.id)
 
+      api = ApiKey.create(api_key: SecureRandom.uuid)
       user_five = User.create!(username: 'my_user_name4',
-                               passwd: '12345678',
-                               passwd_confirmation: '12345678')
+                               passwd: '12345678', api_key: api, plan: plan)
       email_five = Email.create!(email: 'user4@watchiot.com',
                                  user_id: user_five.id)
 
@@ -145,9 +158,10 @@ RSpec.describe Team, type: :model do
 
   describe 'valid remove a team member' do
     it 'is valid remove a team member' do
-      expect { Team.add_member(@user, 'user1@watchiot.com') }
-          .to change { ActionMailer::Base.deliveries.count }
-                  .by(1)
+      ActiveJob::Base.queue_adapter = :test
+      expect {
+        Team.add_member(@user, 'user1@watchiot.com')
+      }.to have_enqueued_job.on_queue('mailers')
 
       expect { Team.remove_member(@user, @user_two.id) }
           .to_not raise_error

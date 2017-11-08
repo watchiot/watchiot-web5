@@ -103,7 +103,7 @@ def before_each(type_test)
     @email = Email.create!(email: 'user@watchiot.com',
                            user_id: @user.id)
 
-    @token = VerifyClient.create_token(
+    @token = VerifyClient.token(
         @user.id, @email.email, 'verify_client') if 'verifyClientModel' == type_test
 
     if 'emailModel'    == type_test ||
@@ -114,7 +114,7 @@ def before_each(type_test)
        'notif'         == type_test
 
       @user_two = User.create!(username: 'my_user_name1',
-                               passwd: '12345678', plan_id: plan.id, api_key: api.id)
+                               passwd: '12345678', plan: plan, api_key: api)
 
       @email_two = Email.create!(email: 'user1@watchiot.com',
                                  user_id: @user_two.id,

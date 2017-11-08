@@ -64,7 +64,7 @@ RSpec.describe Email, type: :model do
 
   describe 'valid primary email' do
     it 'is valid add the email like primary unchecked' do
-      expect { expect( Email.primary @user.id, @email.id) }
+      expect { expect( Email.primary @user, @email.id) }
           .to raise_error('The email has to be check')
     end
 
@@ -72,7 +72,7 @@ RSpec.describe Email, type: :model do
       # set like checked
       @email.update!(checked: true)
       # set this email like primary
-      email = Email.primary @user.id, @email.id
+      email = Email.primary @user, @email.id
       expect(email.primary).to eq(true)
     end
 
@@ -80,7 +80,7 @@ RSpec.describe Email, type: :model do
       # set like checked
       @email.update!(checked: true)
       # set this email like primary
-      email = Email.primary @user.id, @email.id
+      email = Email.primary @user, @email.id
       expect(email.primary).to eq(true)
 
       # add other email to the account
@@ -91,7 +91,7 @@ RSpec.describe Email, type: :model do
           .to eq(true)
 
       # set this new email like primary
-      new_primary = Email.primary @user.id, other_email.id
+      new_primary = Email.primary @user, other_email.id
 
       expect(new_primary.primary).to eq(true)
       # this email already left to be primary
@@ -104,7 +104,7 @@ RSpec.describe Email, type: :model do
       email.update!(checked: true)
 
       # try to set like primary an email primary in other account
-      expect { Email.primary @user.id, email.id }
+      expect { Email.primary @user, email.id }
           .to raise_error('The email is primary in other account')
     end
   end
@@ -119,7 +119,7 @@ RSpec.describe Email, type: :model do
     it 'is valid remove an primary email' do
       @email.update!(checked: true)
       # set this email like primary
-      email = Email.primary @user.id, @email.id
+      email = Email.primary @user, @email.id
       expect(email.primary).to eq(true)
 
       # set the other email like primary
@@ -135,7 +135,7 @@ RSpec.describe Email, type: :model do
       email = Email.add_email(@user.id, 'user12@watchiot.com')
       email.update!(checked: true)
 
-      email = Email.primary @user.id, email.id
+      email = Email.primary @user, email.id
       expect(email.primary).to eq(true)
 
       expect { Email.remove_email @user.id, @email.id}
@@ -148,8 +148,10 @@ RSpec.describe Email, type: :model do
 
   describe 'valid to send verification' do
     it 'is valid to send verification check email' do
-      expect { Email.send_verify(@user.id, @email.id) }
-          .to change { ActionMailer::Base.deliveries.count }.by(1)
+      ActiveJob::Base.queue_adapter = :test
+      expect {
+        Email.send_verify(@user.id, @email.id)
+      }.to have_enqueued_job.on_queue('mailers')
     end
 
     it 'is valid to send verification uncheck email' do
@@ -202,9 +204,11 @@ RSpec.describe Email, type: :model do
     end
 
     it 'is valid find into two account with the same email no primary' do
+      api = ApiKey.create(api_key: SecureRandom.uuid)
+      plan = Plan.create!(name: 'Free', amount_per_month: 0)
+
       user = User.create!(username: 'my_user_name_new',
-                          passwd: '12345678',
-                          passwd_confirmation: '12345678')
+                          passwd: '12345678', api_key: api ,plan: plan)
       Email.create!(email: 'user@watchiot.com', user_id: user.id)
 
       # two account with the same email no primary
@@ -220,9 +224,11 @@ RSpec.describe Email, type: :model do
                     primary: true,
                     checked: true)
 
+      api = ApiKey.create(api_key: SecureRandom.uuid)
+      plan = Plan.create!(name: 'Free', amount_per_month: 0)
+
       user = User.create!(username: 'my_user_name_new',
-                          passwd: '12345678',
-                          passwd_confirmation: '12345678')
+                          passwd: '12345678', api_key: api ,plan: plan)
       Email.create!(email: 'user@watchiot.com', user_id: user.id)
 
       email = Email.find_email_forgot 'user@watchiot.com'
