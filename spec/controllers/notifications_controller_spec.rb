@@ -9,10 +9,9 @@ RSpec.describe NotificationsController, type: :controller do
 
     # add one users
     @user = User.new(username: 'my_user_name',
-               passwd: '12345678',
-               passwd_confirmation: '12345678')
+               passwd: '12345678')
     email = Email.new(email: 'newemail@watchiot.com')
-    @user.register email
+    User.register @user, email
 
     @email = Email.create!(email: 'user@watchiot.com',
                            user_id: @user.id)
@@ -64,16 +63,14 @@ RSpec.describe NotificationsController, type: :controller do
 
     it 'using patch has a 302 status code, great' do
       patch :do_reset, token: '12345',
-            user: {passwd_new: 'my_user_name',
-                   passwd_confirmation: 'my_user_name'}
+            user: {passwd_new: 'my_user_name'}
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/login')
     end
 
     it 'using patch with not match password has a 200 status code' do
       patch :do_reset, token: '12345',
-            user: {passwd_new: 'my_user_name',
-                   passwd_confirmation: 'my_user_name_bad'}
+            user: {passwd_new: 'my_user_name'}
       expect(response.status).to eq(200)
       expect(response).to render_template('users/reset')
       expect(flash[:error]).to eq('Password does not match the confirm')
@@ -81,8 +78,7 @@ RSpec.describe NotificationsController, type: :controller do
 
     it 'using patch with password to short has a 200 status code' do
       patch :do_reset, token: '12345',
-            user: {passwd_new: '123',
-                   passwd_confirmation: '123'}
+            user: {passwd_new: '123'}
       expect(response.status).to eq(200)
       expect(response).to render_template('users/reset')
       expect(flash[:error]).to eq('Password has less than 8 characters')
@@ -130,16 +126,14 @@ RSpec.describe NotificationsController, type: :controller do
     it 'using patch to active the account invited has a 302 status code' do
       patch :do_invite, token: '12345',
           user: { username: 'my_user_name',
-                  passwd: 'my_user_name',
-                  passwd_confirmation: 'my_user_name'}
+                  passwd: 'my_user_name'}
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/' + @user.username)
     end
 
     it 'using patch to active the account with not match password has a 200 status code' do
       patch :do_invite, token: '12345',
-            user: {passwd: 'my_user_name',
-                   passwd_confirmation: 'my_user_name_bad'}
+            user: {passwd: 'my_user_name'}
       expect(response.status).to eq(200)
       expect(response).to render_template('users/invited')
       expect(flash[:error]).to eq('Password does not match the confirm')
@@ -147,8 +141,7 @@ RSpec.describe NotificationsController, type: :controller do
 
     it 'using patch to active the account with password to short has a 200 status code' do
       patch :do_invite, token: '12345',
-            user: {passwd: '123',
-                   passwd_confirmation: '123'}
+            user: {passwd: '123'}
       expect(response.status).to eq(200)
       expect(response).to render_template('users/invited')
       expect(flash[:error]).to eq('Password has less than 8 characters')

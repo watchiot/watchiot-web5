@@ -9,10 +9,9 @@ RSpec.describe DashboardController, type: :controller do
 
     # add one users
     @user = User.new(username: 'user_name',
-                    passwd: '12345678',
-                    passwd_confirmation: '12345678')
+                    passwd: '12345678')
     email = Email.new(email: 'user@watchiot.com')
-    @user.register email
+    User.register @user, email
 
     user_new = User.find_by_username 'user_name'
     email_login = user_new.emails.first

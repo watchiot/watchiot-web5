@@ -14,10 +14,9 @@ RSpec.describe SettingController, type: :controller do
                        feature_id: fTeam.id, value: '3')
 
     user = User.new(username: 'user_name',
-                    passwd: '12345678',
-                    passwd_confirmation: '12345678')
+                    passwd: '12345678')
     email = Email.new(email: 'user@watchiot.com')
-    user.register email
+    User.register user, email
 
     user_new = User.find_by_username 'user_name'
     email_login = user_new.emails.first
@@ -27,10 +26,9 @@ RSpec.describe SettingController, type: :controller do
     request.cookies[:auth_token] = @user.auth_token
 
     user = User.new(username: 'user_name_unauthorized',
-                    passwd: '12345678',
-                    passwd_confirmation: '12345678')
+                    passwd: '12345678')
     email = Email.new(email: 'user_unauthorized@watchiot.com')
-    user.register email
+    User.register user, email
 
   end
 
@@ -200,8 +198,7 @@ RSpec.describe SettingController, type: :controller do
   describe 'Change password setting' do
     it 'using patch change password fine has a 302 status code' do
       patch :account_ch_password, username: 'user_name',
-           user: {passwd: '12345678', passwd_new: '87654321',
-                     passwd_confirmation: '87654321'}
+           user: {passwd: '12345678', passwd_new: '87654321'}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -215,8 +212,7 @@ RSpec.describe SettingController, type: :controller do
 
     it 'using patch change password too short has a 302 status code' do
       patch :account_ch_password, username: 'user_name',
-            user: {passwd: '12345678', passwd_new: '8765',
-                   passwd_confirmation: '8765'}
+            user: {passwd: '12345678', passwd_new: '8765'}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -231,8 +227,7 @@ RSpec.describe SettingController, type: :controller do
 
     it 'using patch change password not match has a 302 status code' do
       patch :account_ch_password, username: 'user_name',
-            user: {passwd: '12345678', passwd_new: '123456123123',
-                   passwd_confirmation: '12345123322'}
+            user: {passwd: '12345678', passwd_new: '123456123123'}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')

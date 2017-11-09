@@ -7,12 +7,6 @@ RSpec.describe 'routes for generals', type: :routing do
                     action: 'index')
   end
 
-  it 'routes contact us' do
-    expect(post: '/contact').
-        to route_to(controller: 'home',
-                    action: 'contact')
-  end
-
   it 'routes dashboard' do
     expect(get: '/gorums').
         to route_to(controller: 'dashboard',

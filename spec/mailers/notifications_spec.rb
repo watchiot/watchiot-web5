@@ -69,7 +69,7 @@ RSpec.describe Notifier, type: :mailer do
 
   describe 'Send create user email' do
     let(:mail) { Notifier
-           .send_create_user_email('email@watchiot.com', '123456789') }
+           .send_create_user_email('email@watchiot.com', @user, '123456789') }
 
     it 'renders the headers' do
       expect_sub_to_from 'Your have been invited to WatchIoT!!'

@@ -42,17 +42,15 @@ RSpec.describe UsersController, type: :controller do
                        feature_id: fTeam.id, value: '3')
 
     @user = User.new(username: 'user_name',
-                    passwd: '12345678',
-                    passwd_confirmation: '12345678')
+                    passwd: '12345678')
     email = Email.new(email: 'user@watchiot.com')
-    @user.register email
+    User.register @user, email
 
     email_login = @user.emails.first
     @user.active_account(email_login)
 
     @user_two = User.new(username: 'user_name2',
-                    passwd: '12345678',
-                    passwd_confirmation: '12345678')
+                    passwd: '12345678')
     email = Email.new(email: 'user2@watchiot.com')
     @user_two.register email
   end
@@ -67,8 +65,7 @@ RSpec.describe UsersController, type: :controller do
     it 'using post has a 200 status code' do
       post :do_register,
           user: {username: 'my_user',
-                 passwd: '12345678',
-                 passwd_confirmation: '12345678'},
+                 passwd: '12345678'},
           email: {email: 'myemail@watchiot.com'}
       expect(response.status).to eq(200)
       expect(response).to render_template('need_verify_notification')
@@ -77,8 +74,7 @@ RSpec.describe UsersController, type: :controller do
     it 'using post register password not match has a 200 status code' do
       post :do_register,
            user: {username: 'my_user',
-                  passwd: '12345678',
-                  passwd_confirmation: '1234567823'},
+                  passwd: '12345678'},
            email: {email: 'myemail@watchiot.com'}
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
@@ -89,8 +85,7 @@ RSpec.describe UsersController, type: :controller do
     it 'using post register password too short has a 200 status code' do
       post :do_register,
            user: {username: 'my_user',
-                  passwd: '123',
-                  passwd_confirmation: '123'},
+                  passwd: '123'},
            email: {email: 'myemail@watchiot.com'}
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
@@ -101,8 +96,7 @@ RSpec.describe UsersController, type: :controller do
     it 'using post register username empty has a 200 status code' do
       post :do_register,
            user: {username: '',
-                  passwd: '123123123',
-                  passwd_confirmation: '123123123'},
+                  passwd: '123123123'},
            email: {email: 'myemail@watchiot.com'}
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
@@ -113,8 +107,7 @@ RSpec.describe UsersController, type: :controller do
     it 'using post register username nil has a 200 status code' do
       post :do_register,
            user: {username: nil,
-                  passwd: '123123123',
-                  passwd_confirmation: '123123123'},
+                  passwd: '123123123'},
            email: {email: 'myemail@watchiot.com'}
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
@@ -125,8 +118,7 @@ RSpec.describe UsersController, type: :controller do
     it 'using post register username exist has a 200 status code' do
       post :do_register,
            user: {username: 'user_name',
-                  passwd: '123123123',
-                  passwd_confirmation: '123123123'},
+                  passwd: '123123123'},
            email: {email: 'myemail@watchiot.com'}
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
