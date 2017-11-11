@@ -271,10 +271,10 @@ RSpec.describe SpacesController, type: :controller do
     end
 
     it 'using patch member valid has a 302 status code' do
-      Team.add_member(@user, 'user_unauthorized@watchiot.com')
+      Team.add_member(@user, "user_unauthorized@watchiot.com")
 
       patch :transfer, params: { username: 'user_name', namespace: 'my_space',
-            user_member_id: @user_new.id }
+            user_team_id: @user_new.id }
 
       spaces = Space.where(user_id: @user.id).all
       expect(spaces.length).to eq(0)
@@ -294,7 +294,7 @@ RSpec.describe SpacesController, type: :controller do
       Space.create_new_space params, @user_new, @user_new
 
       patch :transfer, params: { username: 'user_name', namespace: 'my_space',
-            user_member_id: @user_new.id }
+            user_team_id: @user_new.id }
 
       spaces = Space.where(user_id: @user.id).all
       expect(spaces.length).to eq(1)
