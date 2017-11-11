@@ -59,10 +59,10 @@ RSpec.describe ProjectsController, type: :controller do
 
     @project1 = Project.create_new_project params, @user_new, @space1, @user_new
   end
-
+=begin
   describe 'all projects' do
     it 'using get all projects has a 200 status code' do
-      get :index, username: 'user_name', namespace: 'my_space'
+      get :index, params: { username: 'user_name', namespace: 'my_space' }
       expect(assigns[:space]).to_not be_nil
       expect(assigns[:space].projects.length).to eq(1)
       expect(response.status).to eq(200)
@@ -70,19 +70,19 @@ RSpec.describe ProjectsController, type: :controller do
     end
 
     it 'using get all project with bad user has a 404 status code' do
-      get :index, username: 'user_name_not_exist', namespace: 'my_space'
+      get :index, params: { username: 'user_name_not_exist', namespace: 'my_space' }
       expect(assigns[:space]).to be_nil
       expect(response.status).to eq(404)
     end
 
     it 'using get all project with bad space has a 404 status code' do
-      get :index, username: 'user_name', namespace: 'bad_space'
+      get :index, params: { username: 'user_name', namespace: 'bad_space' }
       expect(assigns[:space]).to be_nil
       expect(response.status).to eq(404)
     end
 
     it 'using get all projects with user not authorized has a 401 status code' do
-      get :index, username: 'user_name_unauthorized', namespace: 'my_space'
+      get :index, params: { username: 'user_name_unauthorized', namespace: 'my_space' }
       expect(assigns[:space]).to be_nil
       expect(response.status).to eq(401)
     end
@@ -95,7 +95,7 @@ RSpec.describe ProjectsController, type: :controller do
 
       # i am trying to access to 'user_name_unauthorized' spaces with i do not permission
       # 'user_name_unauthorized' has permission to access are my spaces not the other way
-      get :index, username: 'user_name_unauthorized', namespace: 'my_space_unauthorized'
+      get :index, params: { username: 'user_name_unauthorized', namespace: 'my_space_unauthorized' }
       expect(assigns[:space]).to be_nil
       expect(response.status).to eq(401)
     end
@@ -110,7 +110,7 @@ RSpec.describe ProjectsController, type: :controller do
       expect(user.teams.length).to eq(0)
 
       # access to 'user_name_unauthorized' spaces
-      get :index, username: 'user_name_unauthorized', namespace: 'my_space_unauthorized'
+      get :index, params: { username: 'user_name_unauthorized', namespace: 'my_space_unauthorized' }
       expect(assigns[:space]).to_not be_nil
       expect(assigns[:space].projects.length).to eq(1)
       expect(response.status).to eq(200)
@@ -118,7 +118,7 @@ RSpec.describe ProjectsController, type: :controller do
     end
   end
 
-=begin
+
   describe 'show space' do
     it 'using get has a 200 status code' do
       get :show, username: 'user_name', namespace: 'my_space'

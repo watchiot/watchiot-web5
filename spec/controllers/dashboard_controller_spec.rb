@@ -25,7 +25,7 @@ RSpec.describe DashboardController, type: :controller do
 
   describe 'dashboard show' do
     it 'get dashboard show has a 200 status code, all is ok' do
-      get :show, username: @user.username
+      get :show, params: { username: @user.username }
 
       expect(response.status).to eq(200)
       expect(response).to render_template('show')
@@ -34,7 +34,7 @@ RSpec.describe DashboardController, type: :controller do
     end
 
     it 'get dashboard show unauthorised user has a 404 status code, all is ok' do
-      get :show, username: 'any_user'
+      get :show, params: { username: 'any_user' }
       expect(response.status).to eq(404)
       expect(assigns[:space]).to be_nil
       expect(assigns[:logs]).to be_nil

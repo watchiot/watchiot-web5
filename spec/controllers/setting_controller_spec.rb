@@ -34,17 +34,17 @@ RSpec.describe SettingController, type: :controller do
 
   describe 'using get user setting with permissions' do
     it 'has a 200 status code' do
-      get :show, username: 'user_name'
+      get :show, params: { username: 'user_name' }
       expect(response.status).to eq(200)
     end
 
     it ' user setting unauthorized has a 401 status code' do
-      get :show, username: 'user_name_unauthorized'
+      get :show, params: { username: 'user_name_unauthorized' }
       expect(response.status).to eq(401)
     end
 
     it 'using get not found user setting has a 404 status code' do
-      get :show, username: 'user_name_not_exist'
+      get :show, params: { username: 'user_name_not_exist' }
       expect(response.status).to eq(404)
     end
   end
@@ -58,12 +58,12 @@ RSpec.describe SettingController, type: :controller do
       expect(user.country_code).to be_nil
       expect(user.address).to be_nil
 
-      patch :profile, username: 'user_name',
-            user: {first_name: 'User',
-                   last_name: 'Name',
-                   phone: '172823424',
-                   country_code:'EUA',
-                   address: 'Miami'}
+      patch :profile, params: { username: 'user_name',
+            user: { first_name: 'User',
+                    last_name: 'Name',
+                    phone: '172823424',
+                    country_code:'EUA',
+                    address: 'Miami' }}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting')
@@ -79,8 +79,8 @@ RSpec.describe SettingController, type: :controller do
 
   describe 'workin with email setting' do
     it 'using post to add a new email has a 302 status code' do
-      post :account_add_email, username: 'user_name',
-            email: {email: 'my_new_email@watchiot.com'}
+      post :account_add_email, params: { username: 'user_name',
+            email: { email: 'my_new_email@watchiot.com' }}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -90,8 +90,8 @@ RSpec.describe SettingController, type: :controller do
     end
 
     it 'using post to add a bad email has a 302 status code' do
-      post :account_add_email, username: 'user_name',
-           email: {email: 'my_new_email^&%watchiot.com'}
+      post :account_add_email, params: { username: 'user_name',
+           email: { email: 'my_new_email^&%watchiot.com' }}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -102,8 +102,8 @@ RSpec.describe SettingController, type: :controller do
     end
 
     it 'using post to add a nil email has a 302 status code' do
-      post :account_add_email, username: 'user_name',
-           email: {email: nil}
+      post :account_add_email, params: { username: 'user_name',
+           email: { email: nil }}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -114,8 +114,8 @@ RSpec.describe SettingController, type: :controller do
     end
 
     it 'using post to add a nil email has a 302 status code' do
-      post :account_add_email, username: 'user_name',
-           email: {email: ''}
+      post :account_add_email, params: { username: 'user_name',
+           email: {email: ''}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -126,15 +126,15 @@ RSpec.describe SettingController, type: :controller do
     end
 
     it 'Delete an email setting has a 302 status code' do
-      post :account_add_email, username: 'user_name',
-           email: {email: 'my_new_email@watchiot.com'}
+      post :account_add_email, params: { username: 'user_name',
+           email: {email: 'my_new_email@watchiot.com'}}
 
       email = Email.find_by_email 'my_new_email@watchiot.com'
 
       user = User.find_by_username 'user_name'
       expect(user.emails.length).to eq(2)
 
-      delete :account_remove_email, username: 'user_name', id: email.id
+      delete :account_remove_email, params: { username: 'user_name', id: email.id }
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
 
@@ -143,7 +143,7 @@ RSpec.describe SettingController, type: :controller do
     end
 
     it 'Delete an not exists email setting has a 302 status code' do
-      delete :account_remove_email, username: 'user_name', id: -1
+      delete :account_remove_email, params: { username: 'user_name', id: -1 }
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
       expect(flash[:error]).to eq('The email is not valid')
@@ -151,22 +151,22 @@ RSpec.describe SettingController, type: :controller do
 
     it 'Delete an email with not belong you setting has a 302 status code' do
       email = Email.find_by_email 'user_unauthorized@watchiot.com'
-      delete :account_remove_email, username: 'user_name', id: email.id
+      delete :account_remove_email, params: { username: 'user_name', id: email.id }
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
       expect(flash[:error]).to eq('The email is not valid')
     end
 
     it 'add email like primary setting has a 302 status code' do
-      post :account_add_email, username: 'user_name',
-           email: {email: 'my_new_email@watchiot.com'}
+      post :account_add_email, params: {  username: 'user_name',
+           email: {email: 'my_new_email@watchiot.com'}}
 
       email = Email.find_by_email 'my_new_email@watchiot.com'
       email.verify_email
       expect(email.checked).to be(true)
 
-      get :account_primary_email, username: 'user_name',
-           id: email.id
+      get :account_primary_email, params: { username: 'user_name',
+           id: email.id }
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -182,13 +182,13 @@ RSpec.describe SettingController, type: :controller do
     end
 
     it 'send email verify setting has a 302 status code' do
-      post :account_add_email, username: 'user_name',
-           email: {email: 'my_new_email@watchiot.com'}
+      post :account_add_email, params: { username: 'user_name',
+           email: {email: 'my_new_email@watchiot.com'}}
 
       email = Email.find_by_email 'my_new_email@watchiot.com'
 
-      post :account_verify_email, username: 'user_name',
-           id: email.id
+      post :account_verify_email, params: { username: 'user_name',
+           id: email.id }
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -197,8 +197,8 @@ RSpec.describe SettingController, type: :controller do
 
   describe 'Change password setting' do
     it 'using patch change password fine has a 302 status code' do
-      patch :account_ch_password, username: 'user_name',
-           user: {passwd: '12345678', passwd_new: '87654321'}
+      patch :account_ch_password, params: { username: 'user_name',
+           user: {passwd: '12345678', passwd_new: '87654321'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -211,8 +211,8 @@ RSpec.describe SettingController, type: :controller do
     end
 
     it 'using patch change password too short has a 302 status code' do
-      patch :account_ch_password, username: 'user_name',
-            user: {passwd: '12345678', passwd_new: '8765'}
+      patch :account_ch_password, params: { username: 'user_name',
+            user: {passwd: '12345678', passwd_new: '8765'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -223,28 +223,13 @@ RSpec.describe SettingController, type: :controller do
 
       expect { User.login 'user@watchiot.com', '12345678' }
           .to_not raise_error
-    end
-
-    it 'using patch change password not match has a 302 status code' do
-      patch :account_ch_password, username: 'user_name',
-            user: {passwd: '12345678', passwd_new: '123456123123'}
-
-      expect(response.status).to eq(302)
-      expect(response).to redirect_to('/user_name/setting/account')
-      expect(flash[:error]).to eq('Password does not match the confirm')
-
-      expect { User.login 'user@watchiot.com', '123456123123' }
-          .to raise_error('Account is not valid')
-
-      expect { User.login 'user@watchiot.com', '12345678' }
-          .to_not raise_error
-    end
+    end    
   end
 
   describe 'Change username setting' do
     it 'usign patch change username fine has a 302 status code' do
-      patch :account_ch_username, username: 'user_name',
-            user: {username: 'new_user_name'}
+      patch :account_ch_username, params: { username: 'user_name',
+            user: {username: 'new_user_name'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/new_user_name/setting/account')
@@ -256,8 +241,8 @@ RSpec.describe SettingController, type: :controller do
     end
 
     it 'usign patch change username but it exist has a 302 status code' do
-      patch :account_ch_username, username: 'user_name',
-            user: {username: 'user_name_unauthorized'}
+      patch :account_ch_username, params: { username: 'user_name',
+            user: {username: 'user_name_unauthorized'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -270,8 +255,8 @@ RSpec.describe SettingController, type: :controller do
     end
 
     it 'usign patch change username but it exist without _ has a 302 status code' do
-      patch :account_ch_username, username: 'user_name',
-            user: {username: 'user#name#unauthorized'}
+      patch :account_ch_username, params: { username: 'user_name',
+            user: {username: 'user#name#unauthorized'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -284,8 +269,8 @@ RSpec.describe SettingController, type: :controller do
     end
 
     it 'usign patch change username fine has a 302 status code' do
-      patch :account_ch_username, username: 'user_name',
-            user: {username: 'new user@$name'}
+      patch :account_ch_username, params: { username: 'user_name',
+            user: {username: 'new user@$name'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/new-user__name/setting/account')
@@ -303,8 +288,8 @@ RSpec.describe SettingController, type: :controller do
       user = User.find_by_username 'user_name'
       expect(user.status).to be(true)
 
-      delete :account_delete, username: 'user_name',
-            user: {username: 'user_name'}
+      delete :account_delete, params: { username: 'user_name',
+            user: {username: 'user_name'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/')
@@ -317,8 +302,8 @@ RSpec.describe SettingController, type: :controller do
       user = User.find_by_username 'user_name'
       expect(user.status).to be(true)
 
-      delete :account_delete, username: 'user_name',
-             user: {username: 'user_name_not'}
+      delete :account_delete, params: { username: 'user_name',
+             user: {username: 'user_name_not'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -334,8 +319,8 @@ RSpec.describe SettingController, type: :controller do
 
       Space.create!(name: 'my_space', user_id: user.id)
 
-      delete :account_delete, username: 'user_name',
-             user: {username: 'user_name'}
+      delete :account_delete, params: { username: 'user_name',
+             user: {username: 'user_name'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -348,8 +333,8 @@ RSpec.describe SettingController, type: :controller do
 
   describe 'add members setting' do
     it 'using post add an exists user like member has a 302 status code' do
-      post :team_add, username: 'user_name',
-            email: {email: 'user_unauthorized@watchiot.com'}
+      post :team_add, params: { username: 'user_name',
+            email: {email: 'user_unauthorized@watchiot.com'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/team')
@@ -362,8 +347,8 @@ RSpec.describe SettingController, type: :controller do
       email = Email.find_by_email 'user_not_exist@watchiot.com'
       expect(email).to be_nil
 
-      post :team_add, username: 'user_name',
-           email: {email: 'user_not_exist@watchiot.com'}
+      post :team_add, params: { username: 'user_name',
+           email: {email: 'user_not_exist@watchiot.com'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/team')
@@ -376,8 +361,8 @@ RSpec.describe SettingController, type: :controller do
     end
 
     it 'using post add yourself like member has a 302 status code' do
-      post :team_add, username: 'user_name',
-           email: {email: 'user@watchiot.com'}
+      post :team_add, params: { username: 'user_name',
+           email: {email: 'user@watchiot.com'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/team')
@@ -388,8 +373,8 @@ RSpec.describe SettingController, type: :controller do
     end
 
     it 'using post add incalid email  like member has a 302 status code' do
-      post :team_add, username: 'user_name',
-           email: {email: 'user_bad_email_watchiot.com'}
+      post :team_add, params: { username: 'user_name',
+           email: {email: 'user_bad_email_watchiot.com'}}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/team')
@@ -405,8 +390,8 @@ RSpec.describe SettingController, type: :controller do
 
   describe 'remove member setting' do
     it 'using delete has a 302 status code' do
-      post :team_add, username: 'user_name',
-           email: {email: 'user_unauthorized@watchiot.com'}
+      post :team_add, params: { username: 'user_name',
+           email: {email: 'user_unauthorized@watchiot.com'}}
 
       user = User.find_by_username 'user_name'
       expect(user.teams.length).to eq(1)
@@ -414,22 +399,21 @@ RSpec.describe SettingController, type: :controller do
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/team')
 
-      delete :team_delete, username: 'user_name',
-           id: user.teams.first.user_team_id
+      delete :team_delete, params: { username: 'user_name',
+           id: user.teams.first.user_team_id }
 
       user = User.find_by_username 'user_name'
       expect(user.teams.length).to eq(0)
     end
 
     it 'using delete try eliminate not member a 302 status code' do
-      post :team_add, username: 'user_name',
-           email: {email: 'user_unauthorized@watchiot.com'}
+      post :team_add, params: { username: 'user_name',
+           email: { email: 'user_unauthorized@watchiot.com' }}
 
       user = User.find_by_username 'user_name'
       expect(user.teams.length).to eq(1)
 
-      delete :team_delete, username: 'user_name',
-             id: -1
+      delete :team_delete, params: { username: 'user_name', id: -1 }
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/team')
@@ -445,7 +429,7 @@ RSpec.describe SettingController, type: :controller do
       user = User.find_by_username 'user_name'
       api = user.api_key.api_key
 
-      patch :key_generate, username: 'user_name'
+      patch :key_generate, params: { username: 'user_name' }
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/api')
