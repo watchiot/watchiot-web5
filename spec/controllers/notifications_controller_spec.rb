@@ -5,12 +5,17 @@ RSpec.describe NotificationsController, type: :controller do
     # Create plans and users static values for free account
 
     # add plan
-    Plan.create!(name: 'Free', amount_per_month: 0)
+    plan = Plan.create!(name: 'Free', amount_per_month: 0)
+    fTeam = Feature.create!(name: 'Team members')
+
+    PlanFeature.create(plan_id: plan.id,
+                       feature_id: fTeam.id, value: '2')
 
     # add one users
     @user = User.new(username: 'my_user_name',
                passwd: '12345678')
     email = Email.new(email: 'newemail@watchiot.com')
+
     User.register @user, email
 
     @email = Email.create!(email: 'user@watchiot.com',
@@ -25,8 +30,14 @@ RSpec.describe NotificationsController, type: :controller do
     VerifyClient.create!(user_id: @user.id, token: '12345',
                          concept: 'verify_email', data: 'user@watchiot.com')
 
-    VerifyClient.create!(user_id: @user.id, token: '12345',
-                         concept: 'invited', data: 'user@watchiot.com')
+    new_user = User.new(username: 'my_new_user_name', passwd: '12345678')
+    email = Email.new(email: 'user_new@watchiot.com')
+    User.register new_user, email
+
+    Team.add_member @user, 'user_new@watchiot.com'
+
+    VerifyClient.create!(user_id: new_user.id, token: '12345',
+                         concept: 'invited', data: 'user_new@watchiot.com')
   end
 
   describe 'forgot notification' do
@@ -117,10 +128,10 @@ RSpec.describe NotificationsController, type: :controller do
 
     it 'using patch to active the account invited has a 302 status code' do
       patch :do_invite, params: { token: '12345',
-          user: { username: 'my_user_name',
-                  passwd: 'my_user_name'}}
-      expect(response.status).to eq(200)
-      expect(response).to redirect_to('/' + @user.username)
+          user: { username: 'my_new_user_name',
+                  passwd: 'my_new_user_name'}}
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/my_new_user_name')
     end
 
     it 'using patch to active the account with password to short has a 200 status code' do
@@ -128,7 +139,7 @@ RSpec.describe NotificationsController, type: :controller do
             user: { passwd: '123' }}
       expect(response.status).to eq(200)
       expect(response).to render_template('users/invited')
-      expect(flash[:error]).to eq('Password has less than 8 characters')
+      expect(flash[:error]).to eq('Password has less than 8 characters.')
     end
   end
 end
