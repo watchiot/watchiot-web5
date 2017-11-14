@@ -32,7 +32,7 @@ class User < ApplicationRecord
   has_many :projects
   has_many :logs
   has_many :verify_clients
-  belongs_to  :api_key
+  belongs_to :api_key
   belongs_to :plan
 
   validates :username, uniqueness: true,
@@ -107,8 +107,8 @@ class User < ApplicationRecord
 
     user = email.user if user.nil? && !email.nil?
     # find by user id first try with the primary or any
-    email = Email.find_primary_by_user(user.id).take ||
-            Email.find_by_user(user.id).take if email.nil? && !user.nil?
+    email = Email.find_primary(user).take ||
+            Email.find_emails(user).take if email.nil? && !user.nil?
 
     return if user.nil? || !user.status? || email.nil?
 
@@ -168,7 +168,7 @@ class User < ApplicationRecord
 
     return if self.status.nil? || !self.status
 
-    email = Email.find_primary_by_user(self.id).take || Email.find_by_user(self.id).take
+    email = Email.find_primary(self).take || Email.find_emails(self).take
     raise StandardError, 'You dont have an email' if email.nil?
 
     # if the email is not primary it never has activated the account

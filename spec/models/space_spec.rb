@@ -128,13 +128,13 @@ RSpec.describe Space, type: :model do
   describe  'valid delete a space' do
     let(:params) { { name: 'space', description: 'space description'} }
     it 'is valid delete a space without projects' do
-      expect(Space.count_by_user @user.id).to eq(0)
+      expect(Space.count_spaces @user.id).to eq(0)
       space = Space.create_new_space(params, @user, @user)
       expect(space).to be_valid
-      expect(Space.count_by_user @user.id).to eq(1)
+      expect(Space.count_spaces @user.id).to eq(1)
 
       space.delete_space('space')
-      expect(Space.count_by_user @user.id).to eq(0)
+      expect(Space.count_spaces @user.id).to eq(0)
     end
 
     it 's valid delete a space with projects' do
@@ -147,7 +147,7 @@ RSpec.describe Space, type: :model do
 
       project.destroy!
       space.delete_space('space')
-      expect(Space.count_by_user @user.id).to eq(0)
+      expect(Space.count_spaces @user.id).to eq(0)
     end
   end
 
@@ -169,9 +169,9 @@ RSpec.describe Space, type: :model do
       expect {
         space.transfer(@user, @user_two.id, @email_two)
       }.to have_enqueued_job.on_queue('mailers')
-      
+
       # user do not have space
-      expect(Space.count_by_user @user.id).to eq(0)
+      expect(Space.count_spaces @user.id).to eq(0)
 
       # user two have new space
       space = Space.find_by_user_id @user_two.id

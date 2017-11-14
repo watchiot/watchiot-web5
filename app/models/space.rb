@@ -22,11 +22,11 @@ class Space < ApplicationRecord
 
   before_validation :name_format
 
-  scope :count_by_user, -> user_id { where('user_id = ?', user_id).count }
+  scope :count_spaces, -> user_id { where('user_id = ?', user_id).count }
 
-  scope :find_by_user_order, -> user_id { where('user_id = ?', user_id).order(created_at: :desc) }
+  scope :find_spaces, -> user_id { where('user_id = ?', user_id).order(created_at: :desc) }
 
-  scope :find_by_user_and_name, -> user_id, namespace { where('user_id = ?', user_id).where('name = ?', namespace.downcase) if namespace.present? }
+  scope :find_space, -> user_id, namespace { where('user_id = ?', user_id).where('name = ?', namespace.downcase) if namespace.present? }
 
 
   ##
@@ -117,7 +117,7 @@ class Space < ApplicationRecord
   #
   def self.can_create_space?(user)
     return false if user.nil?
-    spaces_count = Space.count_by_user user.id
+    spaces_count = Space.count_spaces user.id
     value = user.plan.find_plan_value('Amount of spaces')
     spaces_count < value.to_i
   end

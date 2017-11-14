@@ -20,32 +20,32 @@ class Email < ApplicationRecord
 
   before_validation :downcase_email
 
-  scope :find_by_user, -> user_id {
-          where('user_id = ?', user_id).order(primary: :desc)
+  scope :find_emails, -> user {
+          where('user_id = ?', user.id).order(primary: :desc) unless user.nil?
         }
 
-  scope :count_by_user, -> user_id {
-          where('user_id = ?', user_id).count
+  scope :count_emails, -> user {
+          where('user_id = ?', user.id).count unless user.nil?
         }
 
-  scope :find_primary_by_user, -> user_id {
-          where('user_id = ?', user_id).
-          where(primary: true)
+  scope :find_email, -> user, email_id {
+          where('user_id = ?', user.id).
+          where('id = ?', email_id) if !user.nil? && email_id.present?
         }
 
-  scope :find_by_user_and_by_id, -> user_id, id {
-          where('user_id = ?', user_id).
-          where('id = ?', id) if id.present?
+  scope :find_email_by_email, -> user, email_s {
+          where('user_id = ?', user.id).
+          where('email = ?', email_s.downcase) if !user.nil? && email_s.present?
         }
 
-  scope :find_primary_by_email, -> email {
-          where('email = ?', email.downcase).
-          where(primary: true) if email.present?
+  scope :find_primary, -> user {
+          where('user_id = ?', user.id).
+          where(primary: true) unless user.nil?
         }
 
-  scope :find_by_user_and_by_email, -> user_id, email {
-          where('user_id = ?', user_id).
-          where('email = ?', email.downcase) if email.present?
+  scope :find_primary_by_email, -> email_s {
+          where('email = ?', email_s.downcase).
+          where(primary: true) if email_s.present?
         }
 
   ## -------------------- Instance method ----------------------- ##
@@ -69,48 +69,46 @@ class Email < ApplicationRecord
   ##
   # Add an email to the account unprimary waiting for verification
   #
-  def self.add_email(user_id, email)
-    raise StandardError, 'is not a valid user' unless
-        User.where('id=?', user_id).exists?
+  def self.add_email(user, email_s)
+    raise StandardError, 'is not a valid user' if user.nil?
 
-    Email.create!(email: email, user_id: user_id)
+    Email.create!(user: user, email: email_s)
   end
 
   ##
   # Set this email id like primary
   #
-  def self.primary(user, email_id)
-    new_email_primary = find_by_user_and_by_id(user.id, email_id).take
+  def self.primary(user, new_primary_email)
 
-    raise StandardError, 'The email is not valid' if new_email_primary.nil?
-    raise StandardError, 'The email has to be check' unless new_email_primary.checked?
-    raise StandardError, 'The email already is primary in your account' if new_email_primary.primary
+    raise StandardError, 'The email is not valid' if new_primary_email.nil?
+    raise StandardError, 'The email has to be check' unless new_primary_email.checked?
+    raise StandardError, 'The email already is primary in your account' if new_primary_email.primary
     raise StandardError, 'The email is primary in other account' if
-          Email.find_primary_by_email(new_email_primary.email).exists?
+          Email.find_primary_by_email(new_primary_email.email).exists?
 
     # set like not primary if exist the current primary email
-    old_email_primary = Email.find_primary_by_user(user.id).take
+    old_email_primary = Email.find_primary(user).take
 
     ActiveRecord::Base.transaction do
       old_email_primary.update!(primary: false) unless old_email_primary.nil?
-      new_email_primary.update!(primary: true)
+      new_primary_email.update!(primary: true)
     end
 
-    Notifier.send_not_primary_email(old_email_primary.email, user).deliver_later unless old_email_primary.nil?   
-    Notifier.send_new_primary_email(new_email_primary.email, user).deliver_later
+    Notifier.send_not_primary_email(old_email_primary.email, user).deliver_later unless old_email_primary.nil?
+    Notifier.send_new_primary_email(new_primary_email.email, user).deliver_later
 
-    new_email_primary
+    new_primary_email
   end
 
   ##
   # Remove an email unprimary
   #
-  def self.remove_email(user_id, email_id)
-    email = find_by_user_and_by_id(user_id, email_id).take
+  def self.remove_email(user, email_id)
+    email = find_email(user, email_id).take
 
     raise StandardError, 'The email is not valid' if email.nil?
     raise StandardError, 'You can not delete the only email with you have '\
-                         'in your account' if Email.count_by_user(user_id) == 1
+                         'in your account' if Email.count_emails(user) == 1
     raise StandardError, 'The email can not be primary' if email.primary?
 
     email.destroy!
@@ -119,13 +117,13 @@ class Email < ApplicationRecord
   ##
   # Send the verification email
   #
-  def self.send_verify(user_id, email_id)
-    email = find_by_user_and_by_id(user_id, email_id).take
+  def self.send_verify(user, email_id)
+    email = find_email(user, email_id).take
 
     raise StandardError, 'The email is not valid' if email.nil?
     raise StandardError, 'The email has to be uncheck' if email.checked?
 
-    token = VerifyClient.token(user_id, email.email, 'verify_email')
+    token = VerifyClient.token(user.id, email.email, 'verify_email')
     Notifier.send_verify_email(email.email, email.user, token).deliver_later
 
     email
@@ -134,11 +132,11 @@ class Email < ApplicationRecord
   ##
   # Define if the email can checked like primary
   #
-  def self.to_activate_by_invitation(user_id, email_s)
+  def self.to_activate_by_invitation(user, email_s)
     email = Email.find_primary_by_email(email_s).take
     raise StandardError, 'The email is not valid' unless email.nil?
 
-    email = Email.find_by_user_and_by_email(user_id, email_s).take
+    email = Email.find_email_by_email(user, email_s).take
     raise StandardError, 'The email is not valid' if email.nil?
 
     email
@@ -147,8 +145,8 @@ class Email < ApplicationRecord
   ##
   # by other user
   #
-  def self.to_check(user_id, email_s)
-    email = Email.find_by_user_and_by_email(user_id, email_s).take
+  def self.to_check(user, email_s)
+    email = Email.find_email_by_email(user, email_s).take
     raise StandardError, 'The email is not valid' if email.nil?
 
     email

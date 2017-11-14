@@ -11,7 +11,7 @@ class SettingController < ApplicationController
   #
   def show
     @email = Email.new
-    @emails = Email.find_by_user(@user.id)
+    @emails = Email.find_emails(@user)
     @teams = Team.my_teams(@user.id)
     @teams_belong = Team.belong_to @user.id
     @countries = Country.all
@@ -37,7 +37,7 @@ class SettingController < ApplicationController
   def account_add_email
     redirect_to '/' + me.username + '/setting/account'
 
-    email = Email.add_email(@user.id, email_params[:email])
+    email = Email.add_email(@user, email_params[:email])
 
     flash_log('Add new email <b>' + email .email + '</b>',
                         'Added a new email correctly')
@@ -52,7 +52,7 @@ class SettingController < ApplicationController
     redirect_to '/' + @user.username + '/setting/account'
 
     email = Email.find_by(id: params[:id])
-    Email.remove_email(@user.id, params[:id])
+    Email.remove_email(@user, params[:id])
 
     flash_log('Delete email <b>' + email.email + '</b>',
               'The email was deleted correctly')
@@ -66,9 +66,10 @@ class SettingController < ApplicationController
   def account_primary_email
     redirect_to '/' + @user.username + '/setting/account'
 
-    email = Email.primary(@user, params[:id])
+    new_email_primary = Email.find_by_id params[:id]
+    Email.primary(@user, new_email_primary)
 
-    flash_log('Set email <b>' + email.email + '</b> like primary',
+    flash_log('Set email <b>' + new_email_primary.email + '</b> like primary',
               'The email was setted like primary correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
@@ -80,7 +81,7 @@ class SettingController < ApplicationController
   def account_verify_email
     redirect_to '/' + @user.username + '/setting/account'
 
-    email = Email.send_verify(@user.id, params[:id])
+    email = Email.send_verify(@user, params[:id])
 
     flash_log('Send to verify the email <b>' + email.email + '</b>',
               'The email to verify was sended correctly')
@@ -150,7 +151,8 @@ class SettingController < ApplicationController
     redirect_to '/' + @user.username + '/setting/team'
 
     Team.remove_member @user, params[:id]
-    email = Email.find_primary_by_user(params[:id]).take || Email.find_by_user(params[:id]).take
+    team_user = User.find_by_id(params[:id])
+    email = Email.find_primary(team_user).take || Email.find_emails(team_user).take
 
     flash_log('Delete a member <b>' + email.email + '</b>',
               'The member was deleted correctly')
@@ -180,7 +182,7 @@ class SettingController < ApplicationController
   def allow_me
     @user = User.find_by_username(params[:username]) || not_found
     @user if auth? && me.username == @user.username || unauthorized
-    @spaces = Space.find_by_user_order(@user.id).all
+    @spaces = Space.find_spaces(@user.id).all
   rescue Errors::UnauthorizedError
     render_401
   end

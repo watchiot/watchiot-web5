@@ -78,10 +78,11 @@ class SpacesController < ApplicationController
   # Patch /:username/:namespace/setting/transfer
   #
   def transfer
-    email_member = Email.find_primary_by_user(params[:user_team_id]).take
-    my_email = Email.find_primary_by_user(@user.id).take
+    user_member = User.find_by_id(params[:user_team_id])
+    email_member = Email.find_primary(user_member).take
+    my_email = Email.find_primary(@user).take
 
-    @space.transfer @user, params[:user_team_id], email_member   
+    @space.transfer @user, params[:user_team_id], email_member
 
     flash_log('Change the owner of space <b>' + @space.name +
                 '</b> to <b>' + email_member.email + '</b>',

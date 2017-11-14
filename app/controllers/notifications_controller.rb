@@ -94,7 +94,8 @@ class NotificationsController < ApplicationController
     team = Team.belong_to(@user.id).take
     @userTeam = User.find_by_id team.user_id
 
-    email = Email.to_activate_by_invitation(@verifyClient.user_id, @verifyClient.data)
+    user = User.find_by_id(@verifyClient.user_id)
+    email = Email.to_activate_by_invitation(user, @verifyClient.data)
     @user.invite user_params, email
     @verifyClient.destroy!
 
@@ -129,8 +130,8 @@ class NotificationsController < ApplicationController
   #
   def find_active_user_by_token
     find_by_concept 'register', params[:token]
-    @email = Email.to_activate_by_invitation(@verifyClient.user_id, @verifyClient.data) ||
-        not_found
+    user = User.find_by_id(@verifyClient.user_id)
+    @email = Email.to_activate_by_invitation(user, @verifyClient.data) || not_found
   rescue
     not_found
   end
@@ -140,8 +141,8 @@ class NotificationsController < ApplicationController
   #
   def find_verify_email_by_token
     find_by_concept 'verify_email', params[:token]
-    @email = Email.to_check(@verifyClient.user_id, @verifyClient.data) ||
-        not_found
+    user = User.find_by_id(@verifyClient.user_id)
+    @email = Email.to_check(user, @verifyClient.data) || not_found
   rescue
     not_found
   end

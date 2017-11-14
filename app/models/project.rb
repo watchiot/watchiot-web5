@@ -30,12 +30,12 @@ class Project < ApplicationRecord
 
   before_validation :name_format
 
-  scope :count_by_user_and_space, -> user_id, space_id {
+  scope :count_projects, -> user_id, space_id {
           where('user_id = ?', user_id).
           where('space_id = ?', space_id).count
         }
 
-  scope :find_by_user_space_and_name, -> user_id, space_id, project {
+  scope :find_project, -> user_id, space_id, project {
           where('user_id = ?', user_id).
           where('space_id = ?', space_id).
           where('name = ?', project.downcase) if project.present?
@@ -173,7 +173,7 @@ class Project < ApplicationRecord
   #
   def self.can_create_project?(user, space)
     return false if user.nil? || space.nil?
-    projects_count = Project.count_by_user_and_space user.id, space.id
+    projects_count = Project.count_projects user.id, space.id
     value = user.plan.find_plan_value('Amount of projects by space')
     projects_count < value.to_i
   end

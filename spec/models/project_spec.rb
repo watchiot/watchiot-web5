@@ -143,13 +143,13 @@ RSpec.describe Project, type: :model do
   describe  'valid delete a project' do
     let(:params) { { name: 'project', description: 'project description'} }
     it 'is valid delete a project without projects' do
-      expect(Project.count_by_user_and_space @user.id, @space.id).to eq(0)
+      expect(Project.count_projects @user.id, @space.id).to eq(0)
       project = Project.create_new_project(params, @user, @space, @user)
       expect(project).to be_valid
-      expect(Project.count_by_user_and_space @user.id, @space.id).to eq(1)
+      expect(Project.count_projects @user.id, @space.id).to eq(1)
 
       project.delete_project('project')
-      expect(Project.count_by_user_and_space @user.id, @space.id).to eq(0)
+      expect(Project.count_projects @user.id, @space.id).to eq(0)
     end
 
     it 's valid delete a project with projects' do
@@ -159,7 +159,7 @@ RSpec.describe Project, type: :model do
           .to raise_error('The project name is not valid')
 
       project.delete_project('project')
-      expect(Project.count_by_user_and_space @user.id, @space.id).to eq(0)
+      expect(Project.count_projects @user.id, @space.id).to eq(0)
     end
   end
 end
