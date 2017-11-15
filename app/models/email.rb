@@ -28,11 +28,6 @@ class Email < ApplicationRecord
           where('user_id = ?', user.id).count unless user.nil?
         }
 
-  scope :find_email, -> user, email_id {
-          where('user_id = ?', user.id).
-          where('id = ?', email_id) if !user.nil? && email_id.present?
-        }
-
   scope :find_email_by_email, -> user, email_s {
           where('user_id = ?', user.id).
           where('email = ?', email_s.downcase) if !user.nil? && email_s.present?
@@ -60,7 +55,7 @@ class Email < ApplicationRecord
   ##
   # Set the check email field like true
   #
-  def verify_email()
+  def verify_email
     self.update!(checked: true)
   end
 
@@ -78,35 +73,36 @@ class Email < ApplicationRecord
   ##
   # Set this email id like primary
   #
-  def self.primary(user, new_primary_email)
+  def self.primary(user, primary_email)
+    valid_email = !primary_email.nil? && !user.nil? && primary_email.user_id == user.id
 
-    raise StandardError, 'The email is not valid' if new_primary_email.nil?
-    raise StandardError, 'The email has to be check' unless new_primary_email.checked?
-    raise StandardError, 'The email already is primary in your account' if new_primary_email.primary
+    raise StandardError, 'The email is not valid' unless valid_email
+    raise StandardError, 'The email has to be check' unless primary_email.checked?
+    raise StandardError, 'The email already is primary in your account' if primary_email.primary
     raise StandardError, 'The email is primary in other account' if
-          Email.find_primary_by_email(new_primary_email.email).exists?
+          Email.find_primary_by_email(primary_email.email).exists?
 
     # set like not primary if exist the current primary email
-    old_email_primary = Email.find_primary(user).take
+    old_primary_email = Email.find_primary(user).take
 
     ActiveRecord::Base.transaction do
-      old_email_primary.update!(primary: false) unless old_email_primary.nil?
-      new_primary_email.update!(primary: true)
+      old_primary_email.update!(primary: false) unless old_primary_email.nil?
+      primary_email.update!(primary: true)
     end
 
-    Notifier.send_not_primary_email(old_email_primary.email, user).deliver_later unless old_email_primary.nil?
-    Notifier.send_new_primary_email(new_primary_email.email, user).deliver_later
+    Notifier.send_not_primary_email(old_primary_email.email, user).deliver_later unless old_primary_email.nil?
+    Notifier.send_new_primary_email(primary_email.email, user).deliver_later
 
-    new_primary_email
+    primary_email
   end
 
   ##
   # Remove an email unprimary
   #
-  def self.remove_email(user, email_id)
-    email = find_email(user, email_id).take
+  def self.remove_email(user, email)
+    valid_email = !email.nil? && !user.nil? && email.user_id == user.id
 
-    raise StandardError, 'The email is not valid' if email.nil?
+    raise StandardError, 'The email is not valid' unless valid_email
     raise StandardError, 'You can not delete the only email with you have '\
                          'in your account' if Email.count_emails(user) == 1
     raise StandardError, 'The email can not be primary' if email.primary?
@@ -117,16 +113,14 @@ class Email < ApplicationRecord
   ##
   # Send the verification email
   #
-  def self.send_verify(user, email_id)
-    email = find_email(user, email_id).take
+  def self.send_verify(user, email)
+    valid_email = !email.nil? && !user.nil? && email.user_id == user.id
 
-    raise StandardError, 'The email is not valid' if email.nil?
+    raise StandardError, 'The email is not valid' unless valid_email
     raise StandardError, 'The email has to be uncheck' if email.checked?
 
     token = VerifyClient.token(user.id, email.email, 'verify_email')
     Notifier.send_verify_email(email.email, email.user, token).deliver_later
-
-    email
   end
 
   ##
@@ -156,7 +150,7 @@ class Email < ApplicationRecord
   # find an email not primary valid
   #
   def self.find_email_forgot (email_s)
-    emails = Email.where(email: email_s.downcase).all
+    emails = Email.where(email: email_s.downcase)
 
     return if emails.nil? || emails.empty?
     return emails.first if emails.length == 1

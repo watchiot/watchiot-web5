@@ -112,7 +112,7 @@ RSpec.describe Email, type: :model do
   describe 'valid remove email' do
     it 'is valid remove the unique email' do
       # you can not delete your unique email in your account
-      expect { Email.remove_email @user, @email.id }
+      expect { Email.remove_email @user, @email }
           .to raise_error('You can not delete the only email with you have in your account')
     end
 
@@ -126,7 +126,7 @@ RSpec.describe Email, type: :model do
       email = Email.add_email(@user, 'user12@watchiot.com')
       email.update!(checked: true)
 
-      expect { Email.remove_email @user, @email.id }
+      expect { Email.remove_email @user, @email }
           .to raise_error('The email can not be primary')
     end
 
@@ -138,10 +138,10 @@ RSpec.describe Email, type: :model do
       email = Email.primary @user, email
       expect(email.primary).to eq(true)
 
-      expect { Email.remove_email @user, @email.id}
+      expect { Email.remove_email @user, @email }
           .to_not raise_error
 
-      expect { Email.remove_email @user, email.id }
+      expect { Email.remove_email @user, email }
           .to raise_error('You can not delete the only email with you have in your account')
     end
   end
@@ -150,12 +150,12 @@ RSpec.describe Email, type: :model do
     it 'is valid to send verification check email' do
       ActiveJob::Base.queue_adapter = :test
       expect {
-        Email.send_verify(@user, @email.id)
+        Email.send_verify(@user, @email)
       }.to have_enqueued_job.on_queue('mailers')
     end
 
     it 'is valid to send verification uncheck email' do
-      expect { Email.send_verify(@user_two, @email_two.id) }
+      expect { Email.send_verify(@user_two, @email_two) }
           .to raise_error('The email has to be uncheck')
     end
   end

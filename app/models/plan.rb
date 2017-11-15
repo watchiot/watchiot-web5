@@ -20,7 +20,7 @@ class Plan < ApplicationRecord
     feature = Feature.find_by_name(feature_name)
     return 0 if feature.nil?
 
-    planFeature = PlanFeature.find_by_plan_and_feature(self.id, feature.id).take
+    planFeature = PlanFeature.find_plan_feature(self.id, feature.id)
     return 0 if planFeature.nil?
 
     planFeature.value

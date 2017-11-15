@@ -51,8 +51,8 @@ class SettingController < ApplicationController
   def account_remove_email
     redirect_to '/' + @user.username + '/setting/account'
 
-    email = Email.find_by(id: params[:id])
-    Email.remove_email(@user, params[:id])
+    email = Email.find_by_id(params[:id])
+    Email.remove_email(@user, email)
 
     flash_log('Delete email <b>' + email.email + '</b>',
               'The email was deleted correctly')
@@ -66,10 +66,10 @@ class SettingController < ApplicationController
   def account_primary_email
     redirect_to '/' + @user.username + '/setting/account'
 
-    new_email_primary = Email.find_by_id params[:id]
-    Email.primary(@user, new_email_primary)
+    email = Email.find_by_id params[:id]
+    Email.primary(@user, email)
 
-    flash_log('Set email <b>' + new_email_primary.email + '</b> like primary',
+    flash_log('Set email <b>' + email.email + '</b> like primary',
               'The email was setted like primary correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
@@ -81,7 +81,8 @@ class SettingController < ApplicationController
   def account_verify_email
     redirect_to '/' + @user.username + '/setting/account'
 
-    email = Email.send_verify(@user, params[:id])
+    email = Email.find_by_id params[:id]
+    Email.send_verify(@user, email)
 
     flash_log('Send to verify the email <b>' + email.email + '</b>',
               'The email to verify was sended correctly')

@@ -96,6 +96,7 @@ class NotificationsController < ApplicationController
 
     user = User.find_by_id(@verifyClient.user_id)
     email = Email.to_activate_by_invitation(user, @verifyClient.data)
+
     @user.invite user_params, email
     @verifyClient.destroy!
 
@@ -158,8 +159,7 @@ class NotificationsController < ApplicationController
   # Get a token
   #
   def find_by_concept(concept, token)
-    @verifyClient = VerifyClient.find_by_token_and_concept(token, concept)
-                                .take || not_found
+    @verifyClient = VerifyClient.find_verify_client(token, concept).take || not_found
     @user = User.find(@verifyClient.user_id) || not_found
   end
 

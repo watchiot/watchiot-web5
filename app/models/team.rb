@@ -15,7 +15,7 @@ class Team < ApplicationRecord
   scope :count_by_user, -> user_id {
           where('user_id = ?', user_id).count
         }
-        
+
   scope :belong_to, -> user_team_id {
           where('user_team_id = ?', user_team_id)
         }
@@ -81,6 +81,7 @@ class Team < ApplicationRecord
   #
   def self.can_add_member?(user)
     return false if user.nil?
+    
     members_count = Team.count_by_user user.id
     value = user.plan.find_plan_value('Team members')
     members_count < value.to_i

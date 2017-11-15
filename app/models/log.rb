@@ -18,10 +18,7 @@ class Log < ApplicationRecord
  # Save logs by actions
  #
  def self.save_log(description, action, owner_user_id, user_action_id)
-   log = Log.new description: description,
-                 action: action,
-                 user_id: owner_user_id,
-                 user_action_id: user_action_id
-   log.save
+   Log.create description: description, action: action,
+              user_id: owner_user_id, user_action_id: user_action_id
  end
 end

@@ -14,21 +14,18 @@
 class VerifyClient < ApplicationRecord
   belongs_to :user
 
-  scope :find_by_token_and_concept, -> token, concept {
+  scope :find_verify_client, -> token, concept {
             where('token = ?', token).
-            where('concept = ?', concept)
-          }
-
-  scope :find_by_user_and_concept, -> user_id, concept {
-            where('user_id = ?', user_id).
-            where('concept = ?', concept)
+            where('concept = ?', concept) unless token.nil? || concept.nil?
           }
 
   ##
   # Register customer verification and return the token
   #
   def self.token(user_id, email, concept)
-    verifyClient = find_by_user_and_concept(user_id, concept).take
+    verifyClient = VerifyClient.where('user_id = ?', user_id)
+                               .where('concept = ?', concept).take
+
     verifyClient = VerifyClient.new if verifyClient.nil?
 
     verifyClient.data = email
