@@ -20,6 +20,9 @@
 #  api_key_id             :integer
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  countryCode            :string
+#  unsubscribe_token      :string
+#  receive_notif          :boolean
 #
 
 require 'rails_helper'

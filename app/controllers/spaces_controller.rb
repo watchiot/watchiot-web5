@@ -40,7 +40,7 @@ class SpacesController < ApplicationController
   # Patch /:username/:namespace
   #
   def edit
-    @space.edit_space(space_edit_params[:description])
+    @space.update_description(space_edit_params[:description])
     @project = Project.new
 
     flash_log('Edit the space <b>' + @space.name + '</b>', 'Space was edited correctly')
@@ -54,7 +54,7 @@ class SpacesController < ApplicationController
   # Get /:username/:namespace/setting
   #
   def setting
-    @teams = Team.my_teams @user.id
+    @teams = Team.my_teams @user
   end
 
   ##
@@ -63,7 +63,7 @@ class SpacesController < ApplicationController
   #
   def change
     old_name = @space.name
-    @space.change_space(space_name_params[:name])
+    @space.update_namespace(space_name_params[:name])
     new_name = @space.name
     flash_log('Change name space <b>' + old_name + '</b> by <b>' + new_name + '</b>',
               'The namespace was changed correctly')
@@ -82,7 +82,7 @@ class SpacesController < ApplicationController
     email_member = Email.find_primary(user_member).take
     my_email = Email.find_primary(@user).take
 
-    @space.transfer @user, params[:user_team_id], email_member
+    @space.transfer @user, user_member, email_member
 
     flash_log('Change the owner of space <b>' + @space.name +
                 '</b> to <b>' + email_member.email + '</b>',

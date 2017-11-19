@@ -75,7 +75,7 @@ RSpec.describe Team, type: :model do
       expect(new_email.primary).to eq(false)
       expect(new_email.checked).to eq(false)
 
-      member = Team.find_member(@user.id, new_user.id).take
+      member = Team.find_member(@user, new_user).take
       expect(member).to be_valid
 
       expect(User.all.count).to eq(3)
@@ -100,10 +100,10 @@ RSpec.describe Team, type: :model do
       }.to have_enqueued_job.on_queue('mailers')
 
       # the account with the primary email was add
-      member = Team.find_member(@user.id, @user_two.id).take
+      member = Team.find_member(@user, @user_two).take
       expect(member).to be_valid
 
-      member_two = Team.find_member(@user.id, user_tree.id).take
+      member_two = Team.find_member(@user, user_tree).take
       expect(member_two).to be_nil
     end
 
@@ -163,12 +163,12 @@ RSpec.describe Team, type: :model do
         Team.add_member(@user, 'user1@watchiot.com')
       }.to have_enqueued_job.on_queue('mailers')
 
-      expect { Team.remove_member(@user, @user_two.id) }
+      expect { Team.remove_member(@user, @user_two) }
           .to_not raise_error
     end
 
     it 'is valid remove an invalid team member' do
-      expect { Team.remove_member(@user, 2345) }
+      expect { Team.remove_member(@user, @user_two) }
           .to raise_error('The member is not valid')
     end
   end

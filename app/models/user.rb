@@ -20,6 +20,9 @@
 #  api_key_id             :integer
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  countryCode            :string
+#  unsubscribe_token      :string
+#  receive_notif          :boolean
 #
 
 class User < ApplicationRecord
@@ -59,7 +62,7 @@ class User < ApplicationRecord
 
     User.create_user_with_email(user, email)
 
-    token = VerifyClient.token(user.id, email.email, 'register')
+    token = VerifyClient.token(user, email.email, 'register')
     Notifier.send_signup_email(email.email, user, token).deliver_later
   end
 
@@ -89,7 +92,7 @@ class User < ApplicationRecord
 
     User.create_user_with_email(user, email)
 
-    token = VerifyClient.token(user.id, email_member, 'invited')
+    token = VerifyClient.token(user, email_member, 'invited')
     Notifier.send_create_user_email(email_member, user, token).deliver_later
     user
   end
@@ -112,7 +115,7 @@ class User < ApplicationRecord
 
     return if user.nil? || !user.status? || email.nil?
 
-    token = VerifyClient.token(user.id, email, 'reset')
+    token = VerifyClient.token(user, email, 'reset')
     Notifier.send_forget_passwd_email(email.email, user, token).deliver_later
   end
 

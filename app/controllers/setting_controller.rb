@@ -12,8 +12,8 @@ class SettingController < ApplicationController
   def show
     @email = Email.new
     @emails = Email.find_emails(@user)
-    @teams = Team.my_teams(@user.id)
-    @teams_belong = Team.belong_to @user.id
+    @teams = Team.my_teams(@user)
+    @teams_belong = Team.belong_to @user
     @countries = Country.all
     @in = valid_tab? ? params[:val] : ''
   end
@@ -151,8 +151,9 @@ class SettingController < ApplicationController
   def team_delete
     redirect_to '/' + @user.username + '/setting/team'
 
-    Team.remove_member @user, params[:id]
     team_user = User.find_by_id(params[:id])
+    Team.remove_member @user, team_user
+
     email = Email.find_primary(team_user).take || Email.find_emails(team_user).take
 
     flash_log('Delete a member <b>' + email.email + '</b>',
@@ -183,7 +184,7 @@ class SettingController < ApplicationController
   def allow_me
     @user = User.find_by_username(params[:username]) || not_found
     @user if auth? && me.username == @user.username || unauthorized
-    @spaces = Space.find_spaces(@user.id).all
+    @spaces = Space.find_spaces(@user)
   rescue Errors::UnauthorizedError
     render_401
   end

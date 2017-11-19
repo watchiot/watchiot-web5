@@ -12,8 +12,8 @@ class PlanFeature < ApplicationRecord
   belongs_to :plan
   belongs_to :feature
 
-  scope :find_plan_feature, -> plan_id, feature_id {
-          where('plan_id = ?', plan_id).
-          where('feature_id = ?', feature_id).take unless plan_id.nil? || feature_id.nil?
+  scope :find_plan_feature, -> plan, feature {
+          where('plan_id = ?', plan.id).
+          where('feature_id = ?', feature.id).take unless plan.nil? || feature.nil?
         }
 end

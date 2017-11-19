@@ -4,7 +4,8 @@ module UsersHelper
   ##
   # This method return the primary email
   #
-  def user_email(user)
+  def user_email(user_id)
+    user = User.find(user_id)
     email = Email.find_primary(user).take
     email.email unless email.nil?
   end

@@ -12,21 +12,17 @@
 class Team < ApplicationRecord
   belongs_to :user
 
-  scope :count_by_user, -> user_id {
-          where('user_id = ?', user_id).count
+  scope :belong_to, -> user_team {
+          where('user_team_id = ?', user_team.id) unless user_team.nil?
         }
 
-  scope :belong_to, -> user_team_id {
-          where('user_team_id = ?', user_team_id)
+  scope :my_teams, -> user_team {
+          where('user_id = ?', user_team.id) unless user_team.nil?
         }
 
-  scope :my_teams, -> user_team_id {
-          where('user_id = ?', user_team_id)
-        }
-
-  scope :find_member, -> user_id, user_team_id {
-          where('user_id = ?', user_id).
-          where('user_team_id = ?', user_team_id)
+  scope :find_member, -> user, user_team {
+          where('user_id = ?', user.id).
+          where('user_team_id = ?', user_team.id) unless user.nil? || user_team.nil?
         }
 
   ## -------------------- Class method -------------------------- ##
@@ -41,20 +37,20 @@ class Team < ApplicationRecord
     user_member = find_or_create_member(email_s)
     raise StandardError, 'The member can not be added' if user_member.nil?
     raise StandardError, 'The member can not be yourself' if user.id == user_member.id
-    raise StandardError, 'The member was added before' if Team.find_member(user.id, user_member.id).exists?
+    raise StandardError, 'The member was added before' if Team.find_member(user, user_member).exists?
 
-    Team.create!(user_id: user.id, user_team_id: user_member.id)
+    Team.create!(user: user, user_team_id: user_member.id)
     Notifier.send_new_team_email(email_s, user, user_member).deliver_later
   end
 
   ##
   # remove a member for the team
   #
-  def self.remove_member(user, user_team_id)
+  def self.remove_member(user, user_team)
     raise StandardError, 'The member is not valid' if
-        user.nil? || user_team_id.nil?
+        user.nil? || user_team.nil?
 
-    member = Team.find_member(user.id, user_team_id).take
+    member = Team.find_member(user, user_team).take
     raise StandardError, 'The member is not valid' if member.nil?
     member.destroy!
   end
@@ -81,8 +77,8 @@ class Team < ApplicationRecord
   #
   def self.can_add_member?(user)
     return false if user.nil?
-    
-    members_count = Team.count_by_user user.id
+
+    members_count = Team.where('user_id = ?', user.id).count
     value = user.plan.find_plan_value('Team members')
     members_count < value.to_i
   end

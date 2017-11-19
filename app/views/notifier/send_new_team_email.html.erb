@@ -1,6 +1,6 @@
 <h1>Hi <%= @user_member.username %></h1>
 
-You have been invited by <strong><%= @user.username %>(<%= user_email(@user) %>)</strong> to join a new team on <b>WatchIoT</b>.
+You have been invited by <strong><%= @user.username %>(<%= user_email(@user.id) %>)</strong> to join a new team on <b>WatchIoT</b>.
 
 Login into <strong>WatchIoT</strong> and then you have access to the <a href="<%= url_for(controller: 'dashboard', action: 'show', username: @user.username, only_path: false)  %>">new team</a>
 

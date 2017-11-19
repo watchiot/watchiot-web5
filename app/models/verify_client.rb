@@ -22,14 +22,14 @@ class VerifyClient < ApplicationRecord
   ##
   # Register customer verification and return the token
   #
-  def self.token(user_id, email, concept)
-    verifyClient = VerifyClient.where('user_id = ?', user_id)
-                               .where('concept = ?', concept).take
+  def self.token(user, email, concept)
+    verifyClient = VerifyClient.where('user_id = ?', user.id)
+                               .where('concept = ?', concept).take unless user.nil?
 
     verifyClient = VerifyClient.new if verifyClient.nil?
 
     verifyClient.data = email
-    verifyClient.user_id = user_id
+    verifyClient.user = user
     verifyClient.concept = concept
     verifyClient.token = SecureRandom.uuid
     verifyClient.save!

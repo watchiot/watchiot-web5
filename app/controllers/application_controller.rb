@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
   # This method return the client primary email
   #
   def me_user_email
-    email = Email.find_primary_by_user(me.id).take if auth?
+    email = Email.find_primary(me).take if auth?
     email.email || ''
   end
 
@@ -73,11 +73,11 @@ class ApplicationController < ActionController::Base
     @user = User.find_by_username(params[:username]) || not_found
 
     is_not_me = @user.username != me.username
-    i_am_not_team_member = Team.find_member(@user.id, me.id).empty?
+    i_am_not_team_member = Team.find_member(@user, me).empty?
 
     unauthorized if !auth? || (is_not_me && i_am_not_team_member)
 
-    @spaces = Space.find_spaces(@user.id).all
+    @spaces = Space.find_spaces(@user)
   rescue Errors::UnauthorizedError
     render_401
   end
@@ -87,7 +87,7 @@ class ApplicationController < ActionController::Base
   #
   def allow_space
     name = params[:namespace]
-    @space = Space.find_space(@user.id, name).take || not_found
+    @space = Space.find_space(@user, name).take || not_found
   end
 
   ##

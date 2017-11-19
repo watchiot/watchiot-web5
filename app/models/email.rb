@@ -119,7 +119,7 @@ class Email < ApplicationRecord
     raise StandardError, 'The email is not valid' unless valid_email
     raise StandardError, 'The email has to be uncheck' if email.checked?
 
-    token = VerifyClient.token(user.id, email.email, 'verify_email')
+    token = VerifyClient.token(user, email.email, 'verify_email')
     Notifier.send_verify_email(email.email, email.user, token).deliver_later
   end
 

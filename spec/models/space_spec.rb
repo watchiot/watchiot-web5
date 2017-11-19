@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: spaces
+#
+#  id            :integer          not null, primary key
+#  name          :string
+#  description   :text
+#  user_id       :integer
+#  user_owner_id :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
 
 require 'rails_helper'
 
@@ -60,7 +73,7 @@ RSpec.describe Space, type: :model do
       space1 = Space.create_new_space(params1, @user, @user)
       expect(space1).to be_valid
 
-      expect { space1.change_space 'my-space' }
+      expect { space1.update_namespace 'my-space' }
           .to raise_error(/You have a space with this name/)
     end
   end
@@ -118,7 +131,7 @@ RSpec.describe Space, type: :model do
       space = Space.create_new_space(params, @user, @user)
       expect(space.description).to include('my descrition')
 
-      space.edit_space 'my edit descrition'
+      space.update_description 'my edit descrition'
       # the name space can not change
       expect(space.name).to include('my-space')
       expect(space.description).to include('my edit descrition')
@@ -128,13 +141,13 @@ RSpec.describe Space, type: :model do
   describe  'valid delete a space' do
     let(:params) { { name: 'space', description: 'space description'} }
     it 'is valid delete a space without projects' do
-      expect(Space.count_spaces @user.id).to eq(0)
+      expect(Space.count_spaces @user).to eq(0)
       space = Space.create_new_space(params, @user, @user)
       expect(space).to be_valid
-      expect(Space.count_spaces @user.id).to eq(1)
+      expect(Space.count_spaces @user).to eq(1)
 
       space.delete_space('space')
-      expect(Space.count_spaces @user.id).to eq(0)
+      expect(Space.count_spaces @user).to eq(0)
     end
 
     it 's valid delete a space with projects' do
@@ -147,7 +160,7 @@ RSpec.describe Space, type: :model do
 
       project.destroy!
       space.delete_space('space')
-      expect(Space.count_spaces @user.id).to eq(0)
+      expect(Space.count_spaces @user).to eq(0)
     end
   end
 
@@ -156,7 +169,7 @@ RSpec.describe Space, type: :model do
       params = { name: 'space', description: 'space description'}
       space = Space.create_new_space(params, @user, @user)
 
-      expect { space.transfer(@user, @user_two.id, @email_two) }
+      expect { space.transfer(@user, @user_two, @email_two) }
           .to raise_error('The member is not valid')
     end
 
@@ -167,11 +180,11 @@ RSpec.describe Space, type: :model do
       Team.add_member(@user, @email_two.email)
       ActiveJob::Base.queue_adapter = :test
       expect {
-        space.transfer(@user, @user_two.id, @email_two)
+        space.transfer(@user, @user_two, @email_two)
       }.to have_enqueued_job.on_queue('mailers')
 
       # user do not have space
-      expect(Space.count_spaces @user.id).to eq(0)
+      expect(Space.count_spaces @user).to eq(0)
 
       # user two have new space
       space = Space.find_by_user_id @user_two.id
@@ -189,7 +202,7 @@ RSpec.describe Space, type: :model do
       space = Space.create_new_space(params, @user, @user)
 
       # we can not transfer a space with the same name
-      expect { space.transfer(@user, @user_two.id, @email_two) }
+      expect { space.transfer(@user, @user_two, @email_two) }
           .to raise_error(/You have a space with this name/)
     end
 
@@ -205,7 +218,7 @@ RSpec.describe Space, type: :model do
       params = { name: 'space', description: 'space description'}
       space = Space.create_new_space(params, @user, @user)
 
-      expect { space.transfer(@user, @user_two.id, @email_two) }
+      expect { space.transfer(@user, @user_two, @email_two) }
           .to raise_error('The team member can not add more '\
           'spaces, please contact with us!')
     end

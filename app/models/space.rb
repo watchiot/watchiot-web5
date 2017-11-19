@@ -22,24 +22,29 @@ class Space < ApplicationRecord
 
   before_validation :name_format
 
-  scope :count_spaces, -> user_id { where('user_id = ?', user_id).count }
+  scope :count_spaces, -> user { where('user_id = ?', user.id)
+          .count unless user.nil?
+        }
 
-  scope :find_spaces, -> user_id { where('user_id = ?', user_id).order(created_at: :desc) }
+  scope :find_spaces, -> user { where('user_id = ?', user.id)
+          .order(created_at: :desc).all unless user.nil?
+        }
 
-  scope :find_space, -> user_id, namespace { where('user_id = ?', user_id).where('name = ?', namespace.downcase) if namespace.present? }
-
+  scope :find_space, -> user, namespace { where('user_id = ?', user.id)
+          .where('name = ?', namespace.downcase) if namespace.present? && !user.nil?
+        }
 
   ##
   # edit a space, only can edit the description for now
   #
-  def edit_space(description)
+  def update_description(description)
     update!(description: description)
   end
 
   ##
   # edit a space, only can edit the namespace for now
   #
-  def change_space(namespace)
+  def update_namespace(namespace)
     update!(name: namespace)
   end
 
@@ -47,30 +52,34 @@ class Space < ApplicationRecord
   # delete a space
   #
   def delete_space(namespace)
-    raise StandardError, 'The namespace is not valid' if namespace.nil? || namespace.downcase != name
-    raise StandardError, 'This space can not be delete because it has'\
-                         ' one or more projects associate' if Project.exists?(space_id: id)
+    if namespace.nil? || namespace.downcase != self.name
+      raise StandardError, 'The namespace is not valid'
+    end
+
+    if Project.exists?(space_id: self.id)
+      raise StandardError, 'This space can not be delete because it has'\
+                         ' one or more projects associate'
+    end
+
     destroy!
   end
 
   ##
   # Transfer space and projects to a member team
   #
-  def transfer(user, user_member_id, member_email)
-    raise StandardError, 'The member is not valid' if user.nil? || user_member_id.nil? || !Team.find_member(user.id, user_member_id).exists?
+  def transfer(user, user_member, email_member)
+    if user.nil? || user_member.nil? || !Team.find_member(user, user_member).exists?
+      raise StandardError, 'The member is not valid'
+    end
 
-
-    user = User.find(user_member_id)
     raise StandardError, 'The team member can not add more spaces,'\
-              ' please contact with us!' unless Space.can_create_space?(user)
+              ' please contact with us!' unless Space.can_create_space?(user_member)
 
-    transfer_projects user_member_id
+    transfer_projects user_member
 
-    Notifier.send_transfer_space_email(member_email.email, user, self)
-        .deliver_later unless member_email.nil?
+    Notifier.send_transfer_space_email(email_member.email, user, self)
+        .deliver_later unless email_member.nil?
   end
-
-  ## ------------------------ Class method ------------------------ ##
 
   ##
   # add a new space
@@ -82,21 +91,19 @@ class Space < ApplicationRecord
     Space.create!(
         name: space_params[:name],
         description: space_params[:description],
-        user_id: user.id,
+        user: user,
         user_owner_id: user_owner.id)
   end
 
   private
 
-  ## ------------------ Private Instance method -------------------- ##
-
   ##
   # Transfer all the projects belong space
   #
-  def transfer_projects(user_member_id)
-    self.update!(user_id: user_member_id)
+  def transfer_projects(user_member)
+    self.update!(user: user_member)
     Project.where('space_id = ?', self.id).find_each do |p|
-      p.update!(user_id: user_member_id)
+      p.update!(user: user_member)
     end
   end
 
@@ -110,14 +117,13 @@ class Space < ApplicationRecord
     self.name = self.name.downcase unless self.name.nil?
   end
 
-  ## -------------------- Private Class method ----------------------- ##
-
   ##
   # If i can added more space, free account such has 3 spaces permitted
   #
   def self.can_create_space?(user)
     return false if user.nil?
-    spaces_count = Space.count_spaces user.id
+
+    spaces_count = Space.count_spaces user
     value = user.plan.find_plan_value('Amount of spaces')
     spaces_count < value.to_i
   end

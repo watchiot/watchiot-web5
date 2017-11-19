@@ -104,7 +104,7 @@ def before_each(type_test)
                            user_id: @user.id)
 
     @token = VerifyClient.token(
-        @user.id, @email.email, 'verify_client') if 'verifyClientModel' == type_test
+        @user, @email.email, 'verify_client') if 'verifyClientModel' == type_test
 
     if 'emailModel'    == type_test ||
        'spaceModel'    == type_test ||

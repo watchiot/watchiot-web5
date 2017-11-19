@@ -79,7 +79,7 @@ class NotificationsController < ApplicationController
   def invite
     @token = params[:token]
 
-    team = Team.belong_to(@user.id).take
+    team = Team.belong_to(@user).take
     @userTeam = User.find_by_id team.user_id
 
     render 'users/invited'
@@ -91,7 +91,7 @@ class NotificationsController < ApplicationController
   def do_invite
     @token = params[:token]
 
-    team = Team.belong_to(@user.id).take
+    team = Team.belong_to(@user).take
     @userTeam = User.find_by_id team.user_id
 
     user = User.find_by_id(@verifyClient.user_id)
