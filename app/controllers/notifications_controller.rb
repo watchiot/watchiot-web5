@@ -16,6 +16,7 @@ class NotificationsController < ApplicationController
     @verifyClient.destroy!
 
     cookies[:auth_token] = @user.auth_token
+
     redirect_to '/' + @user.username
   rescue StandardError => ex
     flash[:error] = clear_exception ex.message
@@ -27,6 +28,7 @@ class NotificationsController < ApplicationController
   #
   def forgot
     @user = me || User.new
+
     render 'users/forgot'
   end
 
@@ -36,6 +38,7 @@ class NotificationsController < ApplicationController
   #
   def forgot_notification
     User.send_forgot_notification user_forget_params[:username]
+
     render 'users/forgot_notification'
   end
 
@@ -44,6 +47,7 @@ class NotificationsController < ApplicationController
   #
   def reset
     @token = params[:token]
+
     render 'users/reset'
   end
 
@@ -55,6 +59,7 @@ class NotificationsController < ApplicationController
     @verifyClient.destroy!
 
     cookies.clear
+
     redirect_to '/#get-started'
   rescue StandardError => ex
     flash.now[:error] = clear_exception ex.message
@@ -67,6 +72,7 @@ class NotificationsController < ApplicationController
   def verify_email
     @email.verify_email
     @verifyClient.destroy!
+
     render 'users/verify_email'
   rescue => ex
     flash.now[:error] = clear_exception ex.message
@@ -101,6 +107,7 @@ class NotificationsController < ApplicationController
     @verifyClient.destroy!
 
     cookies[:auth_token] = @user.auth_token
+
     redirect_to '/' + @user.username
   rescue => ex
     flash.now[:error] = clear_exception ex.message
@@ -112,6 +119,7 @@ class NotificationsController < ApplicationController
   #
   def unsubscribe
     User.unsubscribe(params[:token])
+    
     render 'users/unsubscribe'
   rescue => ex
     redirect_to '/'

@@ -2,6 +2,7 @@
 # Error controller
 #
 class ErrorsController < ApplicationController
+
   ##
   # Get 404
   #

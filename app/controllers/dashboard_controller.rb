@@ -11,7 +11,8 @@ class DashboardController < ApplicationController
   #
   def show
     @space = Space.new
-    @logs = Log.where(user_id: @user.id).limit(20)
-                .order(created_at: :desc)
+    @logs = Log.where(user_id: @user.id)
+               .limit(20)
+               .order(created_at: :desc)
   end
 end

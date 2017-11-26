@@ -43,7 +43,9 @@ class SpacesController < ApplicationController
     @space.update_description(space_edit_params[:description])
     @project = Project.new
 
-    flash_log('Edit the space <b>' + @space.name + '</b>', 'Space was edited correctly')
+    flash_log('Edit the space <b>' + @space.name + '</b>',
+                        'Space was edited correctly')
+
     redirect_to '/' + @user.username + '/' + @space.name
   rescue => ex
     flash[:error] = clear_exception ex.message
@@ -106,6 +108,7 @@ class SpacesController < ApplicationController
 
     flash_log('Delete space <b>' + space_name_params[:name] + '</b>',
               'The space was deleted correctly')
+              
     redirect_to '/' + @user.username + '/spaces'
   rescue => ex
     flash[:error] = clear_exception ex.message

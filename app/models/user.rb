@@ -51,7 +51,6 @@ class User < ApplicationRecord
                          message: '"%{value}" is reserved.' }
 
   before_validation :username_format
-  ## -------------------------- Instance method ------------------------------ ##
 
   ##
   # Register a new account
@@ -220,8 +219,6 @@ class User < ApplicationRecord
     self.username = self.username.downcase
     self.username = self.username.byteslice(0, 24) #substring 24
   end
-
-  ## ------------------------- Private Class method ---------------------------- ##
 
   ##
   # Save user and email routine

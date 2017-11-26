@@ -112,6 +112,7 @@ class SettingController < ApplicationController
 
     flash_log('Change username <b>' + old_username + '</b> by <b>' + username_params[:username] + '</b>',
               'The new username was saved correctly')
+
     redirect_to '/' + @user.username + '/setting/account'
   rescue => ex
     flash[:error] = clear_exception ex.message
@@ -125,6 +126,7 @@ class SettingController < ApplicationController
     @user.delete_account username_params[:username]
 
     cookies.clear
+
     redirect_to root_url
   rescue => ex
     flash[:error] = clear_exception ex.message
@@ -136,6 +138,7 @@ class SettingController < ApplicationController
   #
   def team_add
     redirect_to '/' + @user.username + '/setting/team'
+    
     email = email_params[:email]
     Team.add_member @user, email
 
