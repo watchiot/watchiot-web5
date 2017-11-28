@@ -35,13 +35,11 @@ class Project < ApplicationRecord
           where('space_id = ?', space_id).count
         }
 
-  scope :find_project, -> user_id, space_id, project {
+  scope :find_project, -> user_id, space_id, project_name {
           where('user_id = ?', user_id).
           where('space_id = ?', space_id).
-          where('name = ?', project.downcase) if project.present?
+          where('name = ?', project_name.downcase) if project_name.present?
         }
-
-  ## -------------------- Instance method ----------------------- ##
 
   ##
   # edit a project, only can edit the description for now
@@ -53,15 +51,16 @@ class Project < ApplicationRecord
   ##
   # edit a project, only can edit the name for now
   #
-  def change_project(name)
-    update!(name: name)
+  def change_project(project_name)
+    update!(name: project_name)
   end
 
   ##
   # delete a project
   #
-  def delete_project(name)
-    raise StandardError, 'The project name is not valid' if name.nil? || name.downcase != self.name
+  def delete_project(project_name)
+    raise StandardError, 'The project name is not valid' if
+            project_name.nil? || project_name.downcase != self.name
 
     destroy!
   end
@@ -74,8 +73,6 @@ class Project < ApplicationRecord
     update!(repo_name: repo_name) unless repo_name.blank?
   end
 
-  ## ------------------------ Class method ------------------------ ##
-
   ##
   # add a new space
   #
@@ -86,8 +83,8 @@ class Project < ApplicationRecord
     Project.create!(
         name: project_params[:name],
         description: project_params[:description],
-        user_id: user.id,
-        space_id: space.id,
+        use: user,
+        space: space,
         user_owner_id: user_owner.id)
   end
 
@@ -154,8 +151,6 @@ class Project < ApplicationRecord
 
   private
 
-  ## -------------------- Private Instance method ----------------------- ##
-
   ##
   # Format name field, lowercase and '_' by space
   # Admitted only alphanumeric characters
@@ -165,8 +160,6 @@ class Project < ApplicationRecord
     self.name.gsub!(/\s+/, '-') unless self.name.nil?
     self.name = self.name.downcase unless self.name.nil?
   end
-
-  ## -------------------- Private Class method ----------------------- ##
 
   ##
   # If i can added more projects, free account such has 5 projects per space permitted

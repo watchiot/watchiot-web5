@@ -41,7 +41,7 @@ class ProjectsController < ApplicationController
 
   ##
   # Patch /:username/:namespace/:project
-  #
+  #r
   def edit
     @project.edit_project(project_edit_params[:description],
                           project_edit_params[:status])
@@ -146,6 +146,7 @@ class ProjectsController < ApplicationController
 
     flash_log('Delete project <b>' + project_name_params[:name] + '</b>',
               'The project was deleted correctly')
+              
     redirect_to '/' + @user.username + '/' + @space.name
   rescue => ex
     flash[:error] = clear_exception ex.message
