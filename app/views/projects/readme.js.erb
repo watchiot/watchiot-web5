@@ -1,0 +1,1 @@
+$("#readme").html("<%if flash[:error] %><%= j(render 'shared/alert_message') %><% else %><%= j(render 'config_readme_js') %><% end %>")

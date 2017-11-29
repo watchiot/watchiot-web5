@@ -1,0 +1,45 @@
+<pre id="editor"><%= @project.configuration %></pre>
+
+<div class="form-horizontal">
+  <%= form_tag '/' + param_user + '/' + @space.name + '/' + @project.name + '/evaluate', remote: true, method: 'patch', id:'evaluator-form' do  %>
+      <%= hidden_field_tag 'evaluator' %>
+      <div class="col-md-1">
+        <%= submit_tag 'Evaluate', class: 'btn btn-primary', title: 'Syntactic evaluation' %>
+      </div>
+  <% end %>
+
+  <%= form_tag '/' + param_user + '/' + @space.name + '/' + @project.name + '/deploy', remote: true, method: 'patch', id:'deploy-form' do  %>
+      <%= hidden_field_tag 'deploy' %>
+      <%= hidden_field_tag 'repo_name', @project.repo_name || '' %>
+
+      <div class="col-md-1">
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">
+          Deploy
+        </button>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Confirm deploy</h4>
+            </div>
+            <div class="modal-body">
+              <label>Pay attention, if you have any error into the code, this project will be ignore.</label>
+            </div>
+            <div class="modal-footer">
+              <%= submit_tag 'Confirmation', id: 'deploy-btn', class: 'btn btn-primary', title: 'Deploy configuration' %>
+            </div>
+          </div>
+        </div>
+      </div>
+  <% end %>
+</div>
+
+<div id="result-evaluator"></div>
+
+<%= javascript_tag do %>
+    window.tokens = <%=raw @tokens.to_json %>;
+<% end %>

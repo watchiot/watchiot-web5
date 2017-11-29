@@ -1,0 +1,7 @@
+<%= render 'config_repo_project' %>
+
+<% unless @project.repo_name.nil? %>
+    <%= render 'config_readme_project' %>
+<% end%>
+
+<%= render 'config_editor_project' %>

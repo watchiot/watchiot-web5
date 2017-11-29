@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+	<div class="panel-heading"><b>Change name</b></div>
+	<div class="panel-body">
+
+		<small>This change can be painful and break your applications.</small>
+
+		<%= form_for @project, url: '/' + param_user + '/' + @space.name + '/' + @project.name +  '/setting/change'  do |f| %>
+			<div class="form-group">
+
+				<%= div_for(@project, class: 'form-group col-lg-6') do %>
+					<label>Name</label>
+					<div>
+						<%= f.text_field :name, class: 'form-control', placeholder: 'Username', value: @project.name %>
+					</div>
+				<%end%>
+
+				<%= div_for(@project, class: 'form-group col-lg-9') do %>
+					<%= submit_tag 'Change', class: 'btn btn-warning' %>
+				<%end%>
+
+			</div>
+		<%end%>
+	</div>
+</div>

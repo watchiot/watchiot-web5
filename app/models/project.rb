@@ -83,7 +83,7 @@ class Project < ApplicationRecord
     Project.create!(
         name: project_params[:name],
         description: project_params[:description],
-        use: user,
+        user: user,
         space: space,
         user_owner_id: user_owner.id)
   end
@@ -101,7 +101,8 @@ class Project < ApplicationRecord
   # this method return all the token defined
   #
   def self.token
-    WiotParser.token
+    %w(ip url params condition critical if less less_equal repeat_min email template)
+    #WiotParser.token
   end
 
   ##
@@ -122,9 +123,9 @@ class Project < ApplicationRecord
   # Get the repos configurations predefine info
   #
   def self.repos_config(repo_url)
-    uri = URI(repo_url +'repos')
-    req = Net::HTTP.get(uri)
-    JSON.parse req
+    #uri = URI(repo_url +'repos')
+    #req = Net::HTTP.get(uri)
+    #JSON.parse req
   end
 
   ##

@@ -1,0 +1,31 @@
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+	<div class="panel panel-default">
+		<div class="panel-heading" role="tab" id="headingOne">
+			<h4 class="panel-title">
+				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+					Repository of Configurations
+				</a>
+			</h4>
+		</div>
+		<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+			<div class="panel-body">
+        <div class="bs-glyphicons">
+          <ul class="bs-glyphicons-list">
+          <% @repos.each do |name, value| %>
+            <li>
+              <%= link_to '/' + param_user + '/' + @space.name + '/' + @project.name + '/repo/' + name, method: :get do %>
+                <span class="glyphicon" aria-hidden="true">
+                  <%= image_tag @repo_url + 'repos/' + name + '/' + value['image'], {class: 'project-svg', title: value['abstract']} %>
+                </span>
+                <span class="glyphicon-class">
+                  <%= value['title'] %>
+                </span>
+              <% end %>
+            </li>
+          <% end %>
+          </ul>
+        </div>
+			</div>
+		</div>
+	</div>
+</div>
