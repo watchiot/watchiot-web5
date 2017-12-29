@@ -1,20 +1,22 @@
 <% @title='Setting ' + param_user + '/' + @space.name + '/' +@project.name %>
-
-<div class="row dashboard-page index-setting">
-	<div class="">
-		<br />
-		<h3>Setting <%= @project.name %></h3>
+<div class="row">
 		<div class="panel panel-success">
 			<div class="panel-body">
-				<!-- Tab panes -->
-				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane active" id="home">
-						
-						<%= render 'setting_name' %>
-						<%= render 'setting_delete' %>
+				<h3>Setting project</h3>
+			  <br />
+
+				<div class="panel panel-success">
+					<div class="panel-body">
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane active" id="home">
+
+								<%= render 'setting_name' %>
+								<%= render 'setting_delete' %>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
+    </div>
+  </div>
 </div>

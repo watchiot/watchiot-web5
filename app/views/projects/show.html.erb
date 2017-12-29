@@ -1,20 +1,22 @@
-<div class="row dashboard-page project-height">
-	<div class="">
-		<br />
-		<br />
+<% @title=param_user + '/' + @space.name + '/' + @project.name %>
+<div class="row">
 		<div class="panel panel-success">
 			<div class="panel-body">
-				<%= render 'edit_project' %>
-			</div>
-		</div>
+        <h3>Edit project</h3>
+        <br />
+				<div class="panel panel-success">
+					<div class="panel-body">
+						<%= render 'edit_project' %>
+					</div>
+				</div>
 
-		<br />
-		<h3>Configuration</h3>
-		<div class="panel panel-success">
-			<div class="panel-body">
-				<%= render 'config_project' %>
-			</div>
-		</div>
-
-	</div>
+				<br />
+				<h3>Configuration</h3>
+				<div class="panel panel-success">
+					<div class="panel-body">
+						<%= render 'config_project' %>
+					</div>
+				</div>
+    	</div>
+  </div>
 </div>

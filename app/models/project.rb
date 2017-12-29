@@ -123,9 +123,11 @@ class Project < ApplicationRecord
   # Get the repos configurations predefine info
   #
   def self.repos_config(repo_url)
-    uri = URI(repo_url +'repos')
-    req = Net::HTTP.get(uri)
-    JSON.parse req
+      uri = URI(repo_url +'repos')
+      req = Net::HTTP.get(uri)
+      JSON.parse req
+    rescue => ex
+      {} # empty repository
   end
 
   ##
